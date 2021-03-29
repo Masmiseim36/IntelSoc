@@ -1,0 +1,59 @@
+<!DOCTYPE CrossStudio_Package_Description_File>
+<package name="Intel SoC" author="" cpu_manufacturer="Intel" cpu_family="SoC" version="4.0" crossstudio_versions="8:4.8-" dependencies="CMSIS" build_version="crossworks_v4" >
+	<targets>
+		<category name=" Intel SoC" >
+			<cpu name="Cyclon V" />
+			<cpu name="Aria V" />
+			<cpu name="Aria X" />
+		</category>
+	</targets>
+	<documentation>
+		<section name="Creating Intel SoC Projects" >
+			<h5>To create a new Intel SoC project</h5>
+			<ul>
+				<li>Select the <b>File > New Project...</b> menu item.</li>
+				<li>Select the appropriate <b>Generic Intel SoC</b> from the <b>Categories</b> list.</li>
+				<li>Select the required project template type from the <b>Templates</b> list.</li>
+				<li>Set the required project name and location directory.</li>
+				<li>Click <b>OK</b>.</li>
+			</ul>
+			<h5>To build an application that runs in OCM RAM</h5>
+			<ul>
+				<li>Select the project to work on by using the <b>Project > Set Active Project</b> menu option.</li>
+				<li>Select the configuration you require by using the <b>Build > Set Active Build Configuration menu</b> option.</li> 
+				<li>Right click on the project node in the project explorer and select the <b>OCM</b> placement.</li>
+				<li>Build the project by using the <b>Build | Build Project</b> menu option.</li>
+			</ul>
+			<h5>To build an application that runs in DDR RAM</h5>
+			<ul>
+				<li>Select the project to work on by using the <b>Project > Set Active Project</b> menu option.</li>
+				<li>Select the configuration you require by using the <b>Build > Set Active Build Configuration menu</b> option.</li> 
+				<li>Right click on the project node in the project explorer and select the <b>DDR</b> placement.</li>
+				<li>Build the project by using the <b>Build | Build Project</b> menu option.</li>
+			</ul>
+		</section>
+		<section name="Intel SoC Project Specifics" >
+			<h5>Section Placement</h5>
+			<p>CrossStudio for ARM supports Intel SoC projects running applications in a number of different
+			memory configurations. You can select the memory configuration you require by right clicking on the project node in the 
+			project explorer and selecting the <b>Placement</b> property.</p>
+			<p>For Intel SoC projects the set of placements are:</p>
+			<ul>
+				<li><b><a href="file:$(TargetsDir)/CycloneV/sram_placement.xml" >OCM</a></b> application runs in OCM on CPU0.</li>
+				<li><b><a href="file:$(TargetsDir)/CycloneV/sram_placement.xml" >DDR</a></b> application runs in DDR on CPU0.</li>
+			</ul>
+			<h5>Target Startup Code</h5>
+			<p>In the startup code <a href="file:$(TargetsDir)/CycloneV/CycloneV_Startup.s" >CycloneV_Startup.s</a>
+			there are a set of preprocessor defines that configure the startup code and are documented in the startup file itself.</p>
+		</section>
+		<section name="Known Problems" >
+			<p>Debugging an application with CrossWorks is not supported with this version.</p>
+		</section>
+	</documentation>
+	<history>    
+	<version name="4.0" >
+		<description>Initial release for CrossWorks V4.</description>
+	</version>
+	</history>
+</package>
+

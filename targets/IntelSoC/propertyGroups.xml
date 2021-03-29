@@ -1,0 +1,28 @@
+<!DOCTYPE CrossStudio_Group_Values>
+<propertyGroups>
+	<group short="Target Processor" group="Build Options" long="Select a set of target options" name="Target" default="UNKNOWN" >
+		<groupEntry name="CycloneV" family="CycloneV">
+			<property value="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml" name="linker_memory_map_file" />      
+			<property name="arm_architecture" value="v7A" />
+			<property name="arm_core_type" value="Cortex-A9" />
+			<property name="arm_fpu_type" value="VFPv3-D32" />
+			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/CyclonV_Peripherals.xml" />
+			<cdefine name="TARGET_CYCLONEV" value="1" />
+		</groupEntry>
+	</group>
+	<group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="OCM" >
+		<groupEntry name="DDR">
+			<property name="linker_section_placement_file" value="$(TargetsDir)/IntelSoC/sram_placement.xml" />
+			<property name="linker_section_placement_macros" value="SRAM_NAME=DDR" />
+			<property name="arm_target_loader_applicable_loaders" value=""/>
+			<property name="arm_target_loader_default_loader" value=""/>
+		</groupEntry>
+		<groupEntry name="OCM">
+			<property name="linker_section_placement_file" value="$(TargetsDir)/IntelSoC/sram_placement.xml" />
+			<property name="linker_section_placement_macros" value="SRAM_NAME=OCM" />
+			<property name="arm_target_loader_applicable_loaders" value=""/>
+			<property name="arm_target_loader_default_loader" value=""/>
+			<cdefine name="NO_CACHE_ENABLE"/>
+		</groupEntry>
+	</group>
+</propertyGroups>
