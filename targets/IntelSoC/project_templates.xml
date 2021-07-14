@@ -4,7 +4,7 @@
 		<configuration name="ARM Release" />
 		<configuration name="THUMB Debug" />
 		<configuration name="THUMB Release" />
-		<property name="property_groups_file_path" value="$(TargetsDir)/CycloneV/propertyGroups.xml" />
+		<property name="property_groups_file_path" value="$(TargetsDir)/IntelSoC/propertyGroups.xml" />
 		<property name="arm_architecture" value="v7A" />
 		<property name="arm_core_type" value="Cortex-A9" />
 		<property name="arm_fpu_type" value="VFPv3-D32" />
