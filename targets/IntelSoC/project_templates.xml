@@ -8,9 +8,13 @@
 		<property name="arm_architecture" value="v7A" />
 		<property name="arm_core_type" value="Cortex-A9" />
 		<property name="arm_fpu_type" value="VFPv3-D32" />
+		<property name="target_connect_script" value="Connect()" />
+		<property name="target_get_partname_script" value="GetPartName()" />
+		<property name="target_reset_script" value="Reset()" />
+		<property name="target_script_file" value="$(TargetsDir)/IntelSoC/IntelSoC_Target.js" />
 		<property name="build_intermediate_directory" value="$(Configuration)" />
 		<property name="build_output_directory" value="$(Configuration)" />
-		<propertygroup name="Target" value="CycloneV" choose="Yes" />
+		<propertygroup name="Target" value="Cyclone V" choose="Yes" />
 		<propertygroup name="Placement" value="OCM" />
 		<property name="arm_linker_heap_size" value="1024" />
 		<property name="arm_linker_abt_stack_size" value="0" />

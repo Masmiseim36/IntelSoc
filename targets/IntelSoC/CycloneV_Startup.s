@@ -1,6 +1,8 @@
 /*****************************************************************************
   Exception handlers and startup code for an CycloneV target.
   
+  Copyright (c) 2021 by Markus Klein
+
   Copyright (c) 2016 by Michael Fischer (www.emb4fun.de).
   Based on the original Zynq_7000 source from Rowley, therefore:
 
@@ -16,10 +18,6 @@
 /*****************************************************************************
  *                           Preprocessor Definitions
  *                           ------------------------
- *
- * PRESERVE_VFP_REGISTERS
- *
- *   If defined the VFP registers are saved/restored on entry/exit of the irq_handler.
  *
  * NO_CACHE_ENABLE
  * 
@@ -156,6 +154,7 @@ reset_handler:
 #endif
 
   b _start
+  bx lr
 
 /******************************************************************************
  *                                                                            *
@@ -176,69 +175,18 @@ pabort_handler:
 dabort_handler:
   b .  /* Endless loop */
 
-#define GICC_IAR (0xFFFEC100 + 0x0C)
-#define GICC_EOIR (0xFFFEC100 + 0x10)
-
   .global irq_handler
   .type irq_handler, function
 irq_handler:
-  // Store the APCS registers
-  sub lr, lr, #4
-  push {r0-r3, r12, lr}
-  
-#ifdef PRESERVE_VFP_REGISTERS
-  vpush {d0-d7}
-  vpush {d16-d31}
-  vmrs r0, fpscr
-  push {r0}  
-#endif
-
-  // Get ISR source
-  ldr r0, =GICC_IAR 
-  ldr r1, [r0]
-  // check for spurious interrupts
-  ldr r0, =1023
-  cmp r0, r1
-  beq spurious_interrupt
-  
-  // Get ISR handler
-  push {r1}                         /* Store interrupt ID for later use */
-  ldr r0, =interrupt_handlers
-  ldr r1, [r0, +r1, lsl #2]
-
-  // Ensure 8-byte stack alignment
-  mov r0, sp
-  and r0, r0, #4
-  sub sp, sp, r0
-  // Save the sp adjustment
-  push {r0}
-  
-  // Call the ISR
-  blx r1
-  
-  // Restore the sp adjustment
-  pop {r0}
-  add sp, sp, r0
-  
-  // Mark end of interrupt  
-  pop {r1}                          /* Get interrupt ID */
-  ldr r0, =GICC_EOIR
-  str r1, [r0]
-  
-spurious_interrupt:
-
-#ifdef PRESERVE_VFP_REGISTERS
-  pop {r0}
-  vmsr fpscr, r0
-  vpop {d16-d31}
-  vpop {d0-d7}  
-#endif
-
-  // Return from interrupt
-  pop {r0-r3, r12, lr}
-  movs pc, lr
-
-
+  stmfd sp!, {r0}
+  mrs r0, spsr
+  tst r0, #0x80
+  ldmfd sp!, {r0}
+  subnes pc, lr, #4
+  stmfd sp!, {r0-r4, r12, lr}
+  b alt_int_handler_irq
+  ldmfd sp!, {r0-r4, r12, lr}
+  subs pc, lr, #4
 fiq_handler:
   b .  /* Endless loop */
 
