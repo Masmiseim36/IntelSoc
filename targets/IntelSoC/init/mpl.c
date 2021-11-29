@@ -209,6 +209,7 @@ static void SetupBridge (void)
                                  ALT_ADDR_SPACE_NONMPU_ZERO_AT_OCRAM,
                                  ALT_ADDR_SPACE_H2F_ACCESSIBLE,
                                  ALT_ADDR_SPACE_LWH2F_ACCESSIBLE);
+    (void)status;
 } /* SetupBridge */
 
 

@@ -65,8 +65,8 @@ function InitializeDdrMemory ()
 	TargetInterface.message ("## load initialization App");
 	TargetInterface.pokeBinary (0xFFFF0000, "$(TargetsDir)/IntelSoC/init/ARM Release/Init.bin");
 	TargetInterface.message ("## start initialization App");
-	TargetInterface.runFromAddress (0xFFFF0000, 1000000);
-	TargetInterface.message ("## initialization done");
+	var ret = TargetInterface.runFromAddress (0xFFFF0000, 10000);
+	TargetInterface.message ("## initialization done: " + ret);
 	TargetInterface.stop ();
 }
 

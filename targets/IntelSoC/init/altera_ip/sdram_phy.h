@@ -81,7 +81,7 @@
 #define HPS_SDR_BASE    ALT_SDR_OFST
 
 //#define write_register(BASE, OFFSET, DATA) alt_write_word(((BASE) + (OFFSET)), DATA)
-static void write_register(uint32_t BASE, uint32_t OFFSET, uint32_t DATA)
+static inline void write_register(uint32_t BASE, uint32_t OFFSET, uint32_t DATA)
 {
 	alt_write_word (BASE + OFFSET, DATA);
 }

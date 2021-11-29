@@ -1236,33 +1236,27 @@ alt_int_cpu_target_t alt_int_util_cpu_current(void)
 }
 
 #if ALT_INT_PROVISION_VECTOR_SUPPORT
-
-#if   defined(__ARMCOMPILER_VERSION)
-void __attribute__ ((interrupt)) alt_int_handler_irq(void)
-#elif defined(__ARMCC_VERSION)
-void __irq alt_int_handler_irq(void)
-#else
-
-__asm__(".section .vectors, \"ax\";"
-".global __intc_interrupt_vector;"
-"__intc_interrupt_vector:"
-        "b _socfpga_main; "
-        "b __intc_isr_irq; "
-        "b __intc_isr_irq; "
-        "b __intc_isr_irq; "
-        "b __intc_isr_irq; "
-        "b __intc_isr_irq; "
-        "b __intc_isr_irq; "
-        "b __intc_isr_irq; "
-);
-
-void __attribute__ ((interrupt)) __intc_isr_irq(void)
-#endif
-
+    #if   defined(__ARMCOMPILER_VERSION)
+        void __attribute__ ((interrupt)) alt_int_handler_irq(void)
+    #elif defined(__ARMCC_VERSION)
+        void __irq alt_int_handler_irq(void)
+    #else
+        __asm__(".section .vectors, \"ax\";"
+        ".global __intc_interrupt_vector;"
+        "__intc_interrupt_vector:"
+                "b _socfpga_main; "
+                "b __intc_isr_irq; "
+                "b __intc_isr_irq; "
+                "b __intc_isr_irq; "
+                "b __intc_isr_irq; "
+                "b __intc_isr_irq; "
+                "b __intc_isr_irq; "
+                "b __intc_isr_irq; "
+        );
+        void __attribute__ ((interrupt)) __intc_isr_irq(void)
+    #endif
 #else /* #if ALT_INT_PROVISION_VECTOR_SUPPORT */
-
-void alt_int_handler_irq(void)
-
+    void alt_int_handler_irq(void)
 #endif /* #if ALT_INT_PROVISION_VECTOR_SUPPORT */
 {
     /* See GIC 1.0, sections 4.4.4, 4.4.5. */

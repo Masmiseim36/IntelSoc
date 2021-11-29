@@ -78,8 +78,7 @@ ALT_STATUS_CODE scan_mgr_io_scan_chain_prg (
          */
         if (SCAN_MGR_IO_SCAN_ENGINE_STATUS_IDLE != 
                 scan_mgr_io_scan_chain_engine_is_idle (MAX_WAITING_DELAY_IO_SCAN_ENGINE)) {
-           //printf ("scan_mgr_io_scan_chain_prg : " \
-                "Unable to program IO due to IO scan chain engine is active\n");
+           //printf ("scan_mgr_io_scan_chain_prg : "Unable to program IO due to IO scan chain engine is active\n");
             return ALT_E_ERROR;                    
         }
         
@@ -139,8 +138,7 @@ ALT_STATUS_CODE scan_mgr_io_scan_chain_prg (
                 /* Disable IO Scan chain when error detected */
                 alt_clrbits_word(ALT_SCANMGR_EN_ADDR, (1 << io_scan_chain_id));
                 
-                //puts ("scan_mgr_io_scan_chain_prg : " \
-                    "Unable to complete IO scan chain programming.\n");
+                //puts ("scan_mgr_io_scan_chain_prg : "Unable to complete IO scan chain programming.\n");
                 return ALT_E_ERROR;
             }
         }
@@ -222,8 +220,7 @@ ALT_STATUS_CODE scan_mgr_io_scan_chain_prg (
                 /* Disable IO Scan chain when error detected */
                 alt_clrbits_word(ALT_SCANMGR_EN_ADDR, (1 << io_scan_chain_id));
 
-                //puts ("scan_mgr_io_scan_chain_prg : " \
-                    "Unable to complete IO scan chain programming.\n");
+                //puts ("scan_mgr_io_scan_chain_prg : "Unable to complete IO scan chain programming.\n");
                 return ALT_E_ERROR;
             }                           
         } /* if (io_scan_chain_data_residual) */

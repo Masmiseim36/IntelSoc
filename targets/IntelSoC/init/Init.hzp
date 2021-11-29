@@ -56,10 +56,11 @@
       build_intermediate_directory="$(Configuration)"
       build_output_directory="$(Configuration)"
       c_additional_options="-Wall;-Wextra"
-      c_preprocessor_definitions="GNU;soc_cv_av;SUPERVISOR_START;INITIALIZE_STACKS"
+      c_preprocessor_definitions="GNU;soc_cv_av;SUPERVISOR_START;INITIALIZE_STACKS;ALT_INT_PROVISION_VECTOR_SUPPORT=0"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;./../include;./../include/soc_cv_av"
       c_user_include_directories=".;./altera_ip;./generated"
       debug_register_definition_file="./../CyclonV_Peripherals.xml"
+      gcc_optimization_level="Debug"
       linker_memory_map_file="./../CycloneV_MemoryMap.xml"
       linker_printf_fp_enabled="Double"
       linker_section_placement_file="./../sram_placement.xml"
@@ -119,6 +120,9 @@
       <file file_name="./../include/soc_cv_av/alt_clock_manager_init.c" />
       <file file_name="./../include/soc_cv_av/alt_fpga_manager.c" />
       <file file_name="./../include/soc_cv_av/alt_fpga_manager.h" />
+      <file file_name="../include/alt_interrupt.c" />
+      <file file_name="../include/alt_interrupt.h" />
+      <file file_name="../include/alt_printf.h" />
     </folder>
     <folder Name="generated">
       <file file_name="./generated/build.h" />
