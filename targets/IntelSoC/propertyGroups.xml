@@ -2,6 +2,7 @@
 <propertyGroups>
 	<group short="Target Processor" group="Build Options" long="Select a set of target options" name="Target" default="UNKNOWN" >
 		<groupEntry name="Cyclone V" family="IntelSoC">
+			<property name="macros" value="DeviceShort=soc_cv_av" />
 			<property value="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml" name="linker_memory_map_file" />      
 			<property name="arm_architecture" value="v7A" />
 			<property name="arm_core_type" value="Cortex-A9" />
@@ -11,6 +12,7 @@
 			<cdefine name="TARGET_CYCLONEV" value="1" />
 		</groupEntry>
 		<groupEntry name="Aria 10" family="IntelSoC">
+			<property name="macros" value="DeviceShort=soc_a10" />
 			<property value="$(TargetsDir)/IntelSoC/Aria10_MemoryMap.xml" name="linker_memory_map_file" />      
 			<property name="arm_architecture" value="v7A" />
 			<property name="arm_core_type" value="Cortex-A9" />

@@ -1,43 +1,58 @@
 #ifndef ARIA_V_
 #define ARIA_V_
 
-#include "armv7a_V/alt_acpidmap.h"
-#include "armv7a_V/alt_can.h"
-#include "armv7a_V/alt_clkmgr.h"
-#include "armv7a_V/alt_dap.h"
-#include "armv7a_V/alt_dmanonsecure.h"
-#include "armv7a_V/alt_dmasecure.h"
-#include "armv7a_V/alt_emac.h"
-#include "armv7a_V/alt_f2h.h"
-#include "armv7a_V/alt_fpgamgr.h"
-#include "armv7a_V/alt_fpgamgrdata.h"
-#include "armv7a_V/alt_gpio.h"
-#include "armv7a_V/alt_h2f.h"
-#include "armv7a_V/alt_i2c.h"
-#include "armv7a_V/alt_l3.h"
-#include "armv7a_V/alt_l4wd.h"
-#include "armv7a_V/alt_lwfpgaslvs.h"
-#include "armv7a_V/alt_lwh2f.h"
-#include "armv7a_V/alt_mpul2.h"
-#include "armv7a_V/alt_mpuscu.h"
-#include "armv7a_V/alt_nand.h"
-#include "armv7a_V/alt_nanddata.h"
-#include "armv7a_V/alt_ocram.h"
-#include "armv7a_V/alt_qspi.h"
-#include "armv7a_V/alt_qspidata.h"
-#include "armv7a_V/alt_rom.h"
-#include "armv7a_V/alt_rstmgr.h"
-#include "armv7a_V/alt_scanmgr.h"
-#include "armv7a_V/alt_sdmmc.h"
-#include "armv7a_V/alt_sdr.h"
-#include "armv7a_V/alt_spim.h"
-#include "armv7a_V/alt_spis.h"
-#include "armv7a_V/alt_stm.h"
-#include "armv7a_V/alt_sysmgr.h"
-#include "armv7a_V/alt_tmr.h"
-#include "armv7a_V/alt_uart.h"
-#include "armv7a_V/alt_usb.h"
-#include "armv7a_V/hps.h"
-#include "armv7a_V/socal.h"
-armv8/
+#define __CA_REV        0x0000U    /*!< Core revision r0p0                          */
+#define __CORTEX_A           9U    /*!< Cortex-A9 Core                              */
+#define __FPU_PRESENT        1U    /*!< FPU present                                 */
+#define __GIC_PRESENT        1U    /*!< GIC present                                 */
+#define __TIM_PRESENT        1U    /*!< TIM present                                 */
+#define __L2C_PRESENT        1U    /*!< L2C present                                 */
+
+
+#include "core_ca.h"               /* Cortex-A processor and core peripherals       */
+
+
+#include "cmsis_compiler.h"
+
+
+#include "include/alt_16550_uart.h"
+#include "include/alt_generalpurpose_io.h"
+#include "include/alt_nand.h"
+#include "include/alt_address_space.h"
+#include "include/alt_globaltmr.h"
+#include "include/alt_printf.h"
+#include "include/alt_cache.h"
+#include "include/alt_i2c.h"
+#include "include/alt_qspi.h"
+#include "include/alt_can.h"
+#include "include/alt_interrupt.h"
+#include "include/alt_sdmmc.h"
+#include "include/alt_can_private.h"
+#include "include/alt_interrupt_common.h"
+#include "include/alt_spi.h"
+#include "include/alt_dma.h"
+#include "include/alt_l2_p310.h"
+#include "include/alt_timers.h"
+#include "include/alt_dma_common.h"
+#include "include/alt_mmu.h"
+#include "include/alt_watchdog.h"
+#include "include/alt_dma_program.h"
+#include "include/alt_mpu_registers.h"
+#include "include/hwlib.h"
+
+#include "include/soc_cv_av/alt_bridge_manager.h"
+#include "include/soc_cv_av/alt_dma_periph.h"
+#include "include/soc_cv_av/alt_reset_manager.h"
+#include "include/soc_cv_av/alt_clock_group.h"
+#include "include/soc_cv_av/alt_ecc.h"
+#include "include/soc_cv_av/alt_sdram.h"
+#include "include/soc_cv_av/alt_clock_manager.h"
+#include "include/soc_cv_av/alt_fpga_manager.h"
+#include "include/soc_cv_av/alt_system_manager.h"
+#include "include/soc_cv_av/alt_config.h"
+#include "include/soc_cv_av/alt_int_device.h"
+
+#include "include/soc_cv_av/socal/hps.h"
+#include "include/soc_cv_av/socal/socal.h"
+
 #endif // ARIA_V_

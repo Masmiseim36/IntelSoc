@@ -11,17 +11,17 @@
       <file file_name="packages/IntelSoC_package.xml" />
     </folder>
     <folder Name="targets">
-      <file file_name="targets/IntelSoC/CycloneV_MemoryMap.xml" />
-      <file file_name="targets/IntelSoC/CycloneV_Startup.s" />
       <file file_name="targets/IntelSoC/project_templates.xml" />
       <file file_name="targets/IntelSoC/propertyGroups.xml" />
       <file file_name="targets/IntelSoC/sram_placement.xml" />
-      <file file_name="targets/IntelSoC/Arria10_Peripherals.xml" />
-      <file file_name="targets/IntelSoC/CyclonV_Peripherals.xml" />
-      <file file_name="targets/IntelSoC/Stratix10_Peripherals.xml" />
+      <file file_name="targets/IntelSoC/CycloneV.h" />
+      <file file_name="targets/IntelSoC/CycloneV_MemoryMap.xml" />
+      <file file_name="targets/IntelSoC/CycloneV_Startup.s" />
+      <file file_name="targets/IntelSoC/CycloneV_Peripherals.xml" />
       <file file_name="targets/IntelSoC/Aria10.h" />
       <file file_name="targets/IntelSoC/AriaV.h" />
-      <file file_name="targets/IntelSoC/CyclonV.h" />
+      <file file_name="targets/IntelSoC/Arria10_Peripherals.xml" />
+      <file file_name="targets/IntelSoC/Stratix10_Peripherals.xml" />
       <folder Name="include">
         <file file_name="targets/IntelSoC/include/alt_16550_uart.c" />
         <file file_name="targets/IntelSoC/include/alt_16550_uart.h" />
