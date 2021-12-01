@@ -14,7 +14,7 @@
 function Connect ()
 {
 	TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
-	TargetInterface.setDebugInterfaceProperty ("use_adiv5_AHB", 0, 0x00100000, 0x10000000); // DDR RAM
+//	TargetInterface.setDebugInterfaceProperty ("use_adiv5_AHB", 0, 0x00100000, 0x10000000); // DDR RAM
 }
 
 // This function is used to return the controller type as a string
@@ -22,6 +22,7 @@ function Connect ()
 // writing the code to the controller
 function GetPartName ()
 {
+	TargetInterface.message ("## GetPartName");
 }
 
 function MatchPartName (name)
@@ -36,8 +37,8 @@ function MatchPartName (name)
 
 function Reset ()
 {
+	TargetInterface.message ("## Reset");
 	TargetInterface.resetAndStop (1000);
-//	InitializeDdrMemory ();
 }
 
 function LoadBegin ()
@@ -62,6 +63,11 @@ function LoadEnd ()
 
 function InitializeDdrMemory ()
 {
+	if (TargetInterface.implementation() == "crossworks_simulator")
+	{
+		return;
+	}
+
 	TargetInterface.message ("## load initialization App");
 	TargetInterface.pokeBinary (0xFFFF0000, "$(TargetsDir)/IntelSoC/init/ARM Release/Init.bin");
 	TargetInterface.message ("## start initialization App");

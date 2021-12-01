@@ -2,7 +2,7 @@
 #define CYCLONE_V_
 
 
-#define __CA_REV        0x0000U    /*!< Core revision r0p0                          */
+#define __CA_REV        0x0300U    /*!< Core revision r3p0                          */
 #define __CORTEX_A           9U    /*!< Cortex-A9 Core                              */
 #define __FPU_PRESENT        1U    /*!< FPU present                                 */
 #define __GIC_PRESENT        1U    /*!< GIC present                                 */

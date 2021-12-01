@@ -45,11 +45,11 @@
 
 /* to enable printf to uart you must also make mpl with PRINTF_UART defined */
 #if (CONFIG_PRELOADER_SERIAL_SUPPORT == 1)
-#include "alt_printf.h"
+	#include "alt_printf.h"
 #else
-#ifndef ALT_PRINTF
-#define ALT_PRINTF(...) (void)(0)
-#endif
+	#ifndef ALT_PRINTF
+		#define ALT_PRINTF(...) (void)(0)
+	#endif
 #endif
 
 #ifdef PRINTF_UART

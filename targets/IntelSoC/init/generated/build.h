@@ -44,13 +44,13 @@
  * bootloader inside the boot devices / flashes
  */
 #if (CONFIG_PRELOADER_BOOT_FROM_QSPI == 1)
-#define CONFIG_PRELOADER_QSPI_NEXT_BOOT_IMAGE	(0x60000)
+	#define CONFIG_PRELOADER_QSPI_NEXT_BOOT_IMAGE	(0x60000)
 #endif
 #if (CONFIG_PRELOADER_BOOT_FROM_SDMMC == 1)
-#define CONFIG_PRELOADER_SDMMC_NEXT_BOOT_IMAGE	(0x40000)
+	#define CONFIG_PRELOADER_SDMMC_NEXT_BOOT_IMAGE	(0x40000)
 #endif
 #if (CONFIG_PRELOADER_BOOT_FROM_NAND == 1)
-#define CONFIG_PRELOADER_NAND_NEXT_BOOT_IMAGE	(0xc0000)
+	#define CONFIG_PRELOADER_NAND_NEXT_BOOT_IMAGE	(0xc0000)
 #endif
 
 /* Enable FAT partition support when booting from SDMMC. */
@@ -73,7 +73,7 @@
  * Handoff files must provide user option whether to
  * enable watchdog during preloader execution phase
  */
-#define CONFIG_PRELOADER_WATCHDOG_ENABLE	(1)
+#define CONFIG_PRELOADER_WATCHDOG_ENABLE	(0)
 
 /*
  * Handoff files must provide user option whether to enable
@@ -82,15 +82,15 @@
 #define CONFIG_PRELOADER_DEBUG_MEMORY_WRITE	(0)
 /* the base address of debug memory */
 #if (CONFIG_PRELOADER_DEBUG_MEMORY_WRITE == 1)
-#define CONFIG_PRELOADER_DEBUG_MEMORY_ADDR	(0xfffffd00)
-#define CONFIG_PRELOADER_DEBUG_MEMORY_SIZE	(0x200)
+	#define CONFIG_PRELOADER_DEBUG_MEMORY_ADDR	(0xfffffd00)
+	#define CONFIG_PRELOADER_DEBUG_MEMORY_SIZE	(0x200)
 #endif
 
 /* Semihosting support in Preloader */
 #define CONFIG_PRELOADER_SEMIHOSTING		(0)
 
 /* Option to check checksum of subsequent boot software image */
-#define CONFIG_PRELOADER_CHECKSUM_NEXT_IMAGE	(1)
+#define CONFIG_PRELOADER_CHECKSUM_NEXT_IMAGE	(0)
 
 /*
  * Handoff files must provide user option whether to enable
@@ -110,9 +110,9 @@
  */
 #define CONFIG_PRELOADER_EXE_ON_FPGA		(0)
 #if (CONFIG_PRELOADER_EXE_ON_FPGA == 1)
-#define CONFIG_FPGA_MAX_SIZE			(0x10000)
-#define CONFIG_FPGA_DATA_BASE			0xffff0000
-#define CONFIG_FPGA_DATA_MAX_SIZE		(0x10000)
+	#define CONFIG_FPGA_MAX_SIZE			(0x10000)
+	#define CONFIG_FPGA_DATA_BASE			0xffff0000
+	#define CONFIG_FPGA_DATA_MAX_SIZE		(0x10000)
 #endif
 
 /*
@@ -151,19 +151,19 @@
 
 /* To configure whether to scrub the SDRAM to initialize the ECC bits */
 #if (CONFIG_PRELOADER_SDRAM_SCRUBBING == 1)
-/*
- * The region of next stage boot image will be copied to
- */
-#define CONFIG_PRELOADER_SDRAM_SCRUB_BOOT_REGION_START    (0x1000000)
-#define CONFIG_PRELOADER_SDRAM_SCRUB_BOOT_REGION_END    (0x2000000)
-/*
- * Decide remaining region will be scrubbed. This will be done during the flash
- * access (to load next boot image). The region is auto calculated based on the
- * remain region. For SOCFPAGA, it would be 2 regions as below
- * > CONFIG_SYS_SDRAM_BASE to CONFIG_SPL_SDRAM_SCRUB_BOOT_REGION_START
- * > CONFIG_SPL_SDRAM_SCRUB_BOOT_REGION_END to calculated SDRAM size
- */
-#define CONFIG_PRELOADER_SDRAM_SCRUB_REMAIN_REGION    (1)
+	/*
+	 * The region of next stage boot image will be copied to
+	 */
+	#define CONFIG_PRELOADER_SDRAM_SCRUB_BOOT_REGION_START    (0x1000000)
+	#define CONFIG_PRELOADER_SDRAM_SCRUB_BOOT_REGION_END    (0x2000000)
+	/*
+	 * Decide remaining region will be scrubbed. This will be done during the flash
+	 * access (to load next boot image). The region is auto calculated based on the
+	 * remain region. For SOCFPAGA, it would be 2 regions as below
+	 * > CONFIG_SYS_SDRAM_BASE to CONFIG_SPL_SDRAM_SCRUB_BOOT_REGION_START
+	 * > CONFIG_SPL_SDRAM_SCRUB_BOOT_REGION_END to calculated SDRAM size
+	 */
+	#define CONFIG_PRELOADER_SDRAM_SCRUB_REMAIN_REGION    (1)
 
 #endif /* CONFIG_PRELOADER_SDRAM_SCRUBBING */
 
