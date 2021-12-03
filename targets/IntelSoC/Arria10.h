@@ -1,7 +1,8 @@
-#ifndef ARIA_V_
-#define ARIA_V_
+#ifndef ARRIA_X_
+#define ARRIA_X_
 
-#define __CA_REV        0x0300U    /*!< Core revision r3p0                          */
+
+#define __CA_REV        0x0401U    /*!< Core revision 0401-10                       */
 #define __CORTEX_A           9U    /*!< Cortex-A9 Core                              */
 #define __FPU_PRESENT        1U    /*!< FPU present                                 */
 #define __GIC_PRESENT        1U    /*!< GIC present                                 */
@@ -40,19 +41,18 @@
 #include "include/alt_mpu_registers.h"
 #include "include/hwlib.h"
 
-#include "include/soc_cv_av/alt_bridge_manager.h"
-#include "include/soc_cv_av/alt_dma_periph.h"
-#include "include/soc_cv_av/alt_reset_manager.h"
-#include "include/soc_cv_av/alt_clock_group.h"
-#include "include/soc_cv_av/alt_ecc.h"
-#include "include/soc_cv_av/alt_sdram.h"
-#include "include/soc_cv_av/alt_clock_manager.h"
-#include "include/soc_cv_av/alt_fpga_manager.h"
-#include "include/soc_cv_av/alt_system_manager.h"
-#include "include/soc_cv_av/alt_config.h"
-#include "include/soc_cv_av/alt_int_device.h"
+#include "include/soc_a10/alt_bridge_manager.h"
+#include "include/soc_a10/alt_ecc.h"
+#include "include/soc_a10/alt_sdram.h"
+#include "include/soc_a10/alt_clock_manager.h"
+#include "include/soc_a10/alt_fpga_manager.h"
+#include "include/soc_a10/alt_system_manager.h"
+#include "include/soc_a10/alt_config.h"
+#include "include/soc_a10/alt_int_device.h"
+#include "include/soc_a10/alt_dma_periph.h"
+#include "include/soc_a10/alt_reset_manager.h"
 
 #include "include/soc_cv_av/socal/hps.h"
 #include "include/soc_cv_av/socal/socal.h"
 
-#endif // ARIA_V_
+#endif // ARRIA_X_

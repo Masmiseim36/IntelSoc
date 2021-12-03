@@ -3,8 +3,8 @@
 	<targets>
 		<category name=" Intel SoC" >
 			<cpu name="Cyclon V" />
-			<cpu name="Aria V" />
-			<cpu name="Aria X" />
+			<cpu name="Arria V" />
+			<cpu name="Arria X" />
 		</category>
 	</targets>
 	<documentation>

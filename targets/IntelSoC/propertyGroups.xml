@@ -7,19 +7,21 @@
 			<property name="arm_architecture" value="v7A" />
 			<property name="arm_core_type" value="Cortex-A9" />
 			<property name="arm_fpu_type" value="VFPv3-D32" />
-			<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/IntelSoC/include;$(TargetsDir)/IntelSoC/include/soc_cv_av" />
+			<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/IntelSoC;$(TargetsDir)/IntelSoC/include;$(TargetsDir)/IntelSoC/include/soc_cv_av" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/CyclonV_Peripherals.xml" />
 			<cdefine name="TARGET_CYCLONEV" value="1" />
+			<cdefine name="soc_cv_av" value="1" />
 		</groupEntry>
-		<groupEntry name="Aria 10" family="IntelSoC">
+		<groupEntry name="Arria 10" family="IntelSoC">
 			<property name="macros" value="DeviceShort=soc_a10" />
-			<property value="$(TargetsDir)/IntelSoC/Aria10_MemoryMap.xml" name="linker_memory_map_file" />      
+			<property value="$(TargetsDir)/IntelSoC/Arria10_MemoryMap.xml" name="linker_memory_map_file" />      
 			<property name="arm_architecture" value="v7A" />
 			<property name="arm_core_type" value="Cortex-A9" />
 			<property name="arm_fpu_type" value="VFPv3-D32" />
-			<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/IntelSoC/include;$(TargetsDir)/IntelSoC/include/soc_a10" />
-			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/Aria10_Peripherals.xml" />
-			<cdefine name="TARGET_ARIA10" value="1" />
+			<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/IntelSoC;$(TargetsDir)/IntelSoC/include;$(TargetsDir)/IntelSoC/include/soc_a10" />
+			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/Arria10_Peripherals.xml" />
+			<cdefine name="TARGET_ARRIA10" value="1" />
+			<cdefine name="soc_a10" value="1" />
 		</groupEntry>
 	</group>
 	<group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="OCM" >
