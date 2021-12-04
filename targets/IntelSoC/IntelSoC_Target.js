@@ -13,8 +13,11 @@
 // Use GetPartName() for this.
 function Connect ()
 {
-	TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
-//	TargetInterface.setDebugInterfaceProperty ("use_adiv5_AHB", 0, 0x00100000, 0x10000000); // DDR RAM
+	if (TargetInterface.implementation() != "j-link")
+	{
+		TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
+//		TargetInterface.setDebugInterfaceProperty ("use_adiv5_AHB", 0, 0x00100000, 0x10000000); // DDR RAM
+	}
 }
 
 // This function is used to return the controller type as a string

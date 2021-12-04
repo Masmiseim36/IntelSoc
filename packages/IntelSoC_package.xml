@@ -2,7 +2,7 @@
 <package name="Intel SoC" author="" cpu_manufacturer="Intel" cpu_family="SoC" version="4.0" crossstudio_versions="8:4.8-" dependencies="CMSIS" build_version="crossworks_v4" >
 	<targets>
 		<category name=" Intel SoC" >
-			<cpu name="Cyclon V" />
+			<cpu name="Cyclone V" />
 			<cpu name="Arria V" />
 			<cpu name="Arria X" />
 		</category>
@@ -39,11 +39,11 @@
 			project explorer and selecting the <b>Placement</b> property.</p>
 			<p>For Intel SoC projects the set of placements are:</p>
 			<ul>
-				<li><b><a href="file:$(TargetsDir)/CycloneV/sram_placement.xml" >OCM</a></b> application runs in OCM on CPU0.</li>
-				<li><b><a href="file:$(TargetsDir)/CycloneV/sram_placement.xml" >DDR</a></b> application runs in DDR on CPU0.</li>
+				<li><b><a href="file:$(TargetsDir)/IntelSoC/sram_placement.xml" >OCM</a></b> application runs in OCM on CPU0.</li>
+				<li><b><a href="file:$(TargetsDir)/IntelSoC/sram_placement.xml" >DDR</a></b> application runs in DDR on CPU0.</li>
 			</ul>
 			<h5>Target Startup Code</h5>
-			<p>In the startup code <a href="file:$(TargetsDir)/CycloneV/CycloneV_Startup.s" >CycloneV_Startup.s</a>
+			<p>In the startup code <a href="file:$(TargetsDir)/IntelSoC/CycloneV_Startup.s" >CycloneV_Startup.s</a>
 			there are a set of preprocessor defines that configure the startup code and are documented in the startup file itself.</p>
 		</section>
 		<section name="Known Problems" >
