@@ -15,8 +15,26 @@ function Connect ()
 {
 	if (TargetInterface.implementation() != "j-link")
 	{
-		TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
+//		TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
 //		TargetInterface.setDebugInterfaceProperty ("use_adiv5_AHB", 0, 0x00100000, 0x10000000); // DDR RAM
+//		TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", -1);
+		TargetInterface.setDebugInterfaceProperty ("set_adiv5_APB_ap_num", 1);
+//		TargetInterface.setDebugInterfaceProperty ("reset_debug_interface_enabled", false);
+
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80001000); // ETF
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80002000); // CTI
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80003000); // TPIU
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80004000); // CSTF
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80005000); // STM
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80006000); // ETR
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80110000); // CPU0
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80111000); // CPU0_PMU
+//		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80112000); // CPU1
+//		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80113000); // CPU1_PMU
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80118000); // CTI0
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80119000); // CTI1
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011C000); // PTM0
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011D000); // PTM1
 	}
 }
 
@@ -38,10 +56,24 @@ function MatchPartName (name)
 	return partName.substring (0, 6) == name.substring (0, 6);
 }
 
+function MRC(CPnumber, opcode1, CRn, CRm, opcode2)
+{
+	return 0xEE100010 | (opcode1 << 21) | (CRn << 16) | (CPnumber << 8) | (opcode2 << 5) | CRm;
+}
+
+function MCR(CPnumber, opcode1, CRn, CRm, opcode2)
+{
+	return 0xEE000010 | (opcode1 << 21) | (CRn << 16) | (CPnumber << 8) | (opcode2 << 5) | CRm;
+}
+
 function Reset ()
 {
 	TargetInterface.message ("## Reset");
-	TargetInterface.resetAndStop (1000);
+//	TargetInterface.resetAndStop (1000);
+	TargetInterface.stop(1);
+	var i = TargetInterface.executeMRC(MRC(15, 0, 1, 0, 0)); // Read control register
+	TargetInterface.executeMCR(MCR(15, 0, 1, 0, 0), i & ~(1<<0|1<<2|1<<12)); // Write control register
+	TargetInterface.executeMCR(MCR(15, 0, 7, 5, 0)); // Invalidate ICache
 }
 
 function LoadBegin ()
