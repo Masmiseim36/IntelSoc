@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Modified work Copyright (C) 2019-2021 Markus Klein                        *
+ * Copyright (C) 2019-2021 Markus Klein                                      *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
@@ -13,7 +13,17 @@
 // Use GetPartName() for this.
 function Connect ()
 {
-	if (TargetInterface.implementation() != "j-link")
+	var TargetFullName = TargetInterface.getProjectProperty ("Target");
+	var TargetShort    = TargetFullName.substring (0, TargetFullName.length-2);
+	var TargetCore     = TargetFullName.substring (TargetFullName.length-1);
+
+	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
+	
+	TargetInterface.setDeviceTypeProperty (TargetShort);
+
+
+
+//	if (TargetInterface.implementation() != "j-link")
 	{
 //		TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
 //		TargetInterface.setDebugInterfaceProperty ("use_adiv5_AHB", 0, 0x00100000, 0x10000000); // DDR RAM
@@ -27,10 +37,16 @@ function Connect ()
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80004000); // CSTF
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80005000); // STM
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80006000); // ETR
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80110000); // CPU0
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80111000); // CPU0_PMU
-//		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80112000); // CPU1
-//		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80113000); // CPU1_PMU
+		if (TargetCore == "0")
+		{
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80110000); // CPU0
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80111000); // CPU0_PMU
+		}
+		else
+		{
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80112000); // CPU1
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80113000); // CPU1_PMU
+		}
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80118000); // CTI0
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80119000); // CTI1
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011C000); // PTM0
@@ -79,7 +95,13 @@ function Reset ()
 function LoadBegin ()
 {
 	TargetInterface.message ("## call LoadBegin");
-	InitializeDdrMemory ();
+	var TargetFullName = TargetInterface.getProjectProperty ("Target");
+	var TargetShort    = TargetFullName.substring (0, TargetFullName.length-2);
+	var TargetCore     = TargetFullName.substring (TargetFullName.length-1);
+
+	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
+	if (TargetCore == "0")
+		InitializeDdrMemory ();
 }
 
 function LoadEnd ()
