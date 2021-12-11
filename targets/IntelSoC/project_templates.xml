@@ -10,6 +10,8 @@
 		<property name="arm_fpu_type" value="VFPv3-D32" />
 		<property name="target_connect_script" value="Connect()" />
 		<property name="target_get_partname_script" value="GetPartName()" />
+		<property name="target_load_begin_script" value="LoadBegin()" />
+		<property name="target_load_end_script" value="LoadEnd()" />
 		<property name="target_reset_script" value="Reset()" />
 		<property name="target_script_file" value="$(TargetsDir)/IntelSoC/IntelSoC_Target.js" />
 		<property name="build_intermediate_directory" value="$(Configuration)" />
@@ -25,6 +27,7 @@
 		<property name="arm_linker_stack_size" value="0" />
 		<property name="c_additional_options" value="-Wall;-Wextra" />
 		<property name="c_preprocessor_definitions" value="GNU;soc_cv_av;SUPERVISOR_START;INITIALIZE_STACKS" />
+		<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/IntelSoC" />
 		<property name="linker_output_format" />
 		<property name="linker_printf_fmt_level" />
 		<property name="linker_printf_width_precision_supported" />
