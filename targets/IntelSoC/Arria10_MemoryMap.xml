@@ -1,0 +1,5 @@
+<!DOCTYPE Board_Memory_Definition_File>
+<Root name="CycloneV">
+	<MemorySegment name="OCRAM" start="0xFFE00000" size="0x100000"     />
+	<MemorySegment name="DDR"   start="$(DDR_START:0x00100000)" size="$(DDR_SIZE:0xBE700000)" />
+</Root>

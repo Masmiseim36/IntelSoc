@@ -20,6 +20,7 @@
       <file file_name="targets/IntelSoC/CycloneV_Peripherals.xml" />
       <file file_name="targets/IntelSoC/Arria10.h" />
       <file file_name="targets/IntelSoC/ArriaV.h" />
+      <file file_name="targets/IntelSoC/Arria10_MemoryMap.xml" />
       <file file_name="targets/IntelSoC/Arria10_Peripherals.xml" />
       <file file_name="targets/IntelSoC/Stratix10_Peripherals.xml" />
       <folder Name="include">

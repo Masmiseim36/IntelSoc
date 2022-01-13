@@ -39,7 +39,7 @@
 		<folder name="System Files">
 			<file name="$(StudioDir)/source/crt0.s" expand="no" />
 			<file name="$(TargetsDir)/IntelSoC/CycloneV_Startup.s" expand="no" />
-			<file name="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml" expand="no" />
+			<file name="$(TargetsDir)/IntelSoC/IntelSoC_Target.js" expand="no" />
 			<file name="$(TargetsDir)/IntelSoC/sram_placement.xml" expand="no" />
 		</folder>
 		<folder name="alt lib">

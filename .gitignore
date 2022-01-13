@@ -2,3 +2,9 @@ ARM Debug
 ARM Release
 *.hzs
 *.hzq
+*.d
+*.o
+*.asm
+*.ind
+*.ld
+*.map
