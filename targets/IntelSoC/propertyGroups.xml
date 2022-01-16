@@ -7,7 +7,6 @@
 			<property name="arm_architecture" value="v7A" />
 			<property name="arm_core_type" value="Cortex-A9" />
 			<property name="arm_fpu_type" value="VFPv3-D32" />
-			<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/IntelSoC;$(TargetsDir)/IntelSoC/include;$(TargetsDir)/IntelSoC/include/soc_cv_av" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml" />
 			<cdefine name="CYCLONE_V_0" value="1" />
 			<cdefine name="INTEL_SOC" value="1" />
@@ -19,7 +18,6 @@
 			<property name="arm_architecture" value="v7A" />
 			<property name="arm_core_type" value="Cortex-A9" />
 			<property name="arm_fpu_type" value="VFPv3-D32" />
-			<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/IntelSoC;$(TargetsDir)/IntelSoC/include;$(TargetsDir)/IntelSoC/include/soc_cv_av" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml" />
 			<cdefine name="CYCLONE_V_1" value="1" />
 			<cdefine name="INTEL_SOC" value="1" />
@@ -31,7 +29,6 @@
 			<property name="arm_architecture" value="v7A" />
 			<property name="arm_core_type" value="Cortex-A9" />
 			<property name="arm_fpu_type" value="VFPv3-D32" />
-			<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/IntelSoC;$(TargetsDir)/IntelSoC/include;$(TargetsDir)/IntelSoC/include/soc_a10" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/Arria10_Peripherals.xml" />
 			<cdefine name="ARRIA10_0" value="1" />
 			<cdefine name="INTEL_SOC" value="1" />
@@ -43,7 +40,6 @@
 			<property name="arm_architecture" value="v7A" />
 			<property name="arm_core_type" value="Cortex-A9" />
 			<property name="arm_fpu_type" value="VFPv3-D32" />
-			<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/IntelSoC;$(TargetsDir)/IntelSoC/include;$(TargetsDir)/IntelSoC/include/soc_a10" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/Arria10_Peripherals.xml" />
 			<cdefine name="ARRIA10_1" value="1" />
 			<cdefine name="INTEL_SOC" value="1" />
