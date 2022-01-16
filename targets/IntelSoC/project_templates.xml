@@ -26,7 +26,7 @@
 		<property name="arm_linker_und_stack_size" value="0" />
 		<property name="arm_linker_stack_size" value="0" />
 		<property name="c_additional_options" value="-Wall;-Wextra" />
-		<property name="c_preprocessor_definitions" value="GNU;soc_cv_av;SUPERVISOR_START;INITIALIZE_STACKS" />
+		<property name="c_preprocessor_definitions" value="ALT_INT_PROVISION_VECTOR_SUPPORT=0" />
 		<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/IntelSoC;$(TargetsDir)/IntelSoC/include;$(TargetsDir)/IntelSoC/include/$(DeviceShort)" />
 		<property name="linker_output_format" />
 		<property name="linker_printf_fmt_level" />
@@ -65,8 +65,6 @@
 			<file name="$(TargetsDir)/IntelSoC/include/alt_i2c.h" expand="no" />
 			<file name="$(TargetsDir)/IntelSoC/include/alt_interrupt.c" expand="no" />
 			<file name="$(TargetsDir)/IntelSoC/include/alt_interrupt.h" expand="no" />
-			<file name="$(TargetsDir)/IntelSoC/include/alt_interrupt_armcc.s" expand="no" />
-			<file name="$(TargetsDir)/IntelSoC/include/alt_interrupt_armclang.s" expand="no" />
 			<file name="$(TargetsDir)/IntelSoC/include/alt_interrupt_common.h" expand="no" />
 			<file name="$(TargetsDir)/IntelSoC/include/alt_l2_p310.h" expand="no" />
 			<file name="$(TargetsDir)/IntelSoC/include/alt_mmu.c" expand="no" />
