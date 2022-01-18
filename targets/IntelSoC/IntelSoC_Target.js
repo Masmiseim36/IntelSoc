@@ -159,3 +159,11 @@ function InitializeDdrMemory ()
 	TargetInterface.message ("## initialization done: " + ret);
 	TargetInterface.stop ();
 }
+
+function AlterRegister (Addr, Clear, Set)
+{
+	var temp = TargetInterface.peekUint32 (Addr);
+	temp &= ~Clear;
+	temp |= Set;
+	TargetInterface.pokeUint32 (Addr, temp);
+}
