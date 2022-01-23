@@ -74,10 +74,10 @@
       target_script_file="./../IntelSoC_Target.js" />
     <folder Name="System Files">
       <file file_name="crt0.s" />
-      <file file_name="./../CycloneV_Startup.s" />
+      <file file_name="./../IntelSoC_Startup.s" />
+      <file file_name="./../IntelSoC_Target.js" />
       <file file_name="./../CycloneV_MemoryMap.xml" />
       <file file_name="./../sram_placement.xml" />
-      <file file_name="./../IntelSoC_Target.js" />
     </folder>
     <folder Name="src">
       <file file_name="mpl_config.h" />
@@ -120,9 +120,9 @@
       <file file_name="./../include/soc_cv_av/alt_clock_manager_init.c" />
       <file file_name="./../include/soc_cv_av/alt_fpga_manager.c" />
       <file file_name="./../include/soc_cv_av/alt_fpga_manager.h" />
-      <file file_name="../include/alt_interrupt.c" />
-      <file file_name="../include/alt_interrupt.h" />
-      <file file_name="../include/alt_printf.h" />
+      <file file_name="./../include/alt_interrupt.c" />
+      <file file_name="./../include/alt_interrupt.h" />
+      <file file_name="./../include/alt_printf.h" />
     </folder>
     <folder Name="generated">
       <file file_name="./generated/build.h" />

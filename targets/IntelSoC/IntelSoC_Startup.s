@@ -184,7 +184,7 @@ irq_handler:
   ldmfd sp!, {r0}
   subnes pc, lr, #4
   stmfd sp!, {r0-r4, r12, lr}
-  b alt_int_handler_irq
+  bl alt_int_handler_irq
   ldmfd sp!, {r0-r4, r12, lr}
   subs pc, lr, #4
 fiq_handler:
