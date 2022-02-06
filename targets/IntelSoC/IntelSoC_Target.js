@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (C) 2019-2021 Markus Klein                                      *
+ * Copyright (C) 2019-2022 Markus Klein                                      *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
@@ -94,10 +94,9 @@ function Reset ()
 
 	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
 
-	//	TargetInterface.resetAndStop (100);
 	if (TargetCore == "0")
 	{
-		TargetInterface.stop(1);
+		TargetInterface.resetAndStop (100);
 		var i = TargetInterface.executeMRC(MRC(15, 0, 1, 0, 0)); // Read control register
 		TargetInterface.executeMCR(MCR(15, 0, 1, 0, 0), i & ~(1<<0|1<<2|1<<12)); // Write control register
 		TargetInterface.executeMCR(MCR(15, 0, 7, 5, 0)); // Invalidate ICache
@@ -114,11 +113,11 @@ function LoadBegin ()
 	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
 	if (TargetCore == "0")
 	{
-		InitializeDdrMemory ();
-
 		var RSTMGR = 0xFFD05000;
 		var RSTMGR_MPUMODRST = RSTMGR + 0x0010;
-//		AlterRegister (RSTMGR_MPUMODRST, 2, 0); // Enable second core
+		AlterRegister (RSTMGR_MPUMODRST, 2, 0); // Enable second core
+
+		InitializeDdrMemory ();
 	}
 }
 
@@ -129,19 +128,24 @@ function LoadEnd ()
 	var TargetShort    = TargetFullName.substring (0, TargetFullName.length-2);
 	var TargetCore     = TargetFullName.substring (TargetFullName.length-1);
 	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
-	var cpsr = TargetInterface.getRegister ("cpsr");
-	if ((cpsr != 0xFFFFFFFF) && ((cpsr & (1 << 5)) == (1 << 5)))
-	{
-		TargetInterface.message ("## CPU is in Thumb Mode. Switch to ARM Mode");
-		cpsr -= (1 << 5);
-		TargetInterface.setRegister ("cpsr", cpsr);
-	}
 
 	if (TargetCore == "0")
 	{
+		var cpsr = TargetInterface.getRegister ("cpsr");
+		if ((cpsr != 0xFFFFFFFF) && ((cpsr & (1 << 5)) == (1 << 5)))
+		{
+			TargetInterface.message ("## CPU is in Thumb Mode. Switch to ARM Mode");
+			cpsr -= (1 << 5);
+			TargetInterface.setRegister ("cpsr", cpsr);
+		}
+
 		var RSTMGR = 0xFFD05000;
 		var RSTMGR_MPUMODRST = RSTMGR + 0x0010;
-		AlterRegister (RSTMGR_MPUMODRST, 2, 0); // Enable second core
+//		AlterRegister (RSTMGR_MPUMODRST, 2, 0); // Enable second core
+	}
+	else
+	{
+		TargetInterface.stop ();
 	}
 }
 
