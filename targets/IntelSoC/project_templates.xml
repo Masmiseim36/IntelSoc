@@ -17,7 +17,7 @@
 		<property name="build_intermediate_directory" value="$(Configuration)" />
 		<property name="build_output_directory" value="$(Configuration)" />
 		<propertygroup name="Target" value="Cyclone V_0" choose="Yes" />
-		<propertygroup name="Placement" value="OCM" />
+		<propertygroup name="Placement" value="OCRAM" />
 		<property name="arm_linker_heap_size" value="1024" />
 		<property name="arm_linker_abt_stack_size" value="0" />
 		<property name="arm_linker_fiq_stack_size" value="0" />
@@ -38,7 +38,7 @@
 		<folder name="Source Files" filter="c;cpp;cxx;cc;h;s;asm;inc" />
 		<folder name="System Files">
 			<file name="$(StudioDir)/source/crt0.s" expand="no" />
-			<file name="$(TargetsDir)/IntelSoC/CycloneV_Startup.s" expand="no" />
+			<file name="$(TargetsDir)/IntelSoC/IntelSoC_Startup.s" expand="no" />
 			<file name="$(TargetsDir)/IntelSoC/IntelSoC_Target.js" expand="no" />
 			<file name="$(TargetsDir)/IntelSoC/sram_placement.xml" expand="no" />
 		</folder>

@@ -38,7 +38,7 @@
   <project Name="Init">
     <configuration
       Name="Common"
-      Placement="OCM"
+      Placement="OCRAM"
       Target="Cyclone V"
       arm_architecture="v7A"
       arm_core_type="Cortex-A9"
@@ -64,7 +64,7 @@
       linker_memory_map_file="./../CycloneV_MemoryMap.xml"
       linker_printf_fp_enabled="Double"
       linker_section_placement_file="./../sram_placement.xml"
-      linker_section_placement_macros="SRAM_NAME=OCM"
+      linker_section_placement_macros="SRAM_NAME=OCRAM"
       project_directory=""
       project_type="Executable"
       property_groups_file_path="./../propertyGroups.xml"

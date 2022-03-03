@@ -53,9 +53,9 @@
 			<property name="arm_target_loader_applicable_loaders" value=""/>
 			<property name="arm_target_loader_default_loader" value=""/>
 		</groupEntry>
-		<groupEntry name="OCM">
+		<groupEntry name="OCRAM">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/IntelSoC/sram_placement.xml" />
-			<property name="linker_section_placement_macros" value="SRAM_NAME=OCM" />
+			<property name="linker_section_placement_macros" value="SRAM_NAME=OCRAM" />
 			<property name="arm_target_loader_applicable_loaders" value=""/>
 			<property name="arm_target_loader_default_loader" value=""/>
 			<cdefine name="NO_CACHE_ENABLE"/>
