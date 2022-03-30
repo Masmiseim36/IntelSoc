@@ -18,18 +18,14 @@ function Connect ()
 	var TargetCore     = TargetFullName.substring (TargetFullName.length-1);
 
 	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
-	
+
 	TargetInterface.setDeviceTypeProperty (TargetShort);
 
 
 
 //	if (TargetInterface.implementation() != "j-link")
 	{
-//		TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
-//		TargetInterface.setDebugInterfaceProperty ("use_adiv5_AHB", 0, 0x00100000, 0x10000000); // DDR RAM
-//		TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", -1);
 		TargetInterface.setDebugInterfaceProperty ("set_adiv5_APB_ap_num", 1);
-//		TargetInterface.setDebugInterfaceProperty ("reset_debug_interface_enabled", false);
 
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80001000); // ETF
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80002000); // CTI
@@ -37,20 +33,24 @@ function Connect ()
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80004000); // CSTF
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80005000); // STM
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80006000); // ETR
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80007000); // FPGA-CTI
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80080000); // FPGA-ROM
 		if (TargetCore == "0")
 		{
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80110000); // CPU0
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80100000); // A9 ROM
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80110000); // CPU0 Debug
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80111000); // CPU0_PMU
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80118000); // CTI0
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011C000); // PTM0
 		}
 		else
 		{
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80112000); // CPU1
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80100000); // A9 ROM
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80112000); // CPU1 Debug
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80113000); // CPU1_PMU
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80119000); // CTI1
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011D000); // PTM1
 		}
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80118000); // CTI0
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80119000); // CTI1
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011C000); // PTM0
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011D000); // PTM1
 	}
 }
 
