@@ -17,9 +17,17 @@ function Connect ()
 	var TargetShort    = TargetFullName.substring (0, TargetFullName.length-2);
 	var TargetCore     = TargetFullName.substring (TargetFullName.length-1);
 
-	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
+	if (TargetFullName.charAt(TargetFullName.length-2) == '_')
+	{
+		TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
+		TargetInterface.setDeviceTypeProperty (TargetShort);
+//		TargetInterface.setDeviceTypeProperty ("Arria 10");
+	}
+	else
+	{
+		TargetInterface.message ("## TargetFullName: " + TargetFullName);
+	}
 	
-	TargetInterface.setDeviceTypeProperty (TargetShort);
 
 
 
@@ -37,7 +45,7 @@ function Connect ()
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80004000); // CSTF
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80005000); // STM
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80006000); // ETR
-		if (TargetCore == "0")
+		if (TargetCore == null || TargetCore == "0")
 		{
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80110000); // CPU0
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80111000); // CPU0_PMU
@@ -94,7 +102,7 @@ function Reset ()
 
 	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
 
-	if (TargetCore == "0")
+	if (TargetFullName[TargetFullName.length-2] == '_' && TargetCore == "0")
 	{
 		TargetInterface.resetAndStop (100);
 		var i = TargetInterface.executeMRC(MRC(15, 0, 1, 0, 0)); // Read control register
@@ -111,7 +119,7 @@ function LoadBegin ()
 	var TargetCore     = TargetFullName.substring (TargetFullName.length-1);
 
 	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
-	if (TargetCore == "0")
+	if (TargetFullName[TargetFullName.length-2] == '_' && TargetCore == "0")
 	{
 		var RSTMGR = 0xFFD05000;
 		var RSTMGR_MPUMODRST = RSTMGR + 0x0010;
@@ -129,7 +137,7 @@ function LoadEnd ()
 	var TargetCore     = TargetFullName.substring (TargetFullName.length-1);
 	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
 
-	if (TargetCore == "0")
+	if (TargetFullName[TargetFullName.length-2] == '_' && TargetCore == "0")
 	{
 		var cpsr = TargetInterface.getRegister ("cpsr");
 		if ((cpsr != 0xFFFFFFFF) && ((cpsr & (1 << 5)) == (1 << 5)))
