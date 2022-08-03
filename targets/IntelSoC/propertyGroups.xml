@@ -3,7 +3,7 @@
 	<group short="Target Processor" group="Build Options" long="Select a set of target options" name="Target" default="UNKNOWN" >
 		<groupEntry name="Cyclone V_0" family="IntelSoC">
 			<property name="macros" value="DeviceShort=soc_cv_av" />
-			<property value="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml" name="linker_memory_map_file" />      
+			<property value="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml" name="linker_memory_map_file" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml" />
 			<cdefine name="CYCLONE_V_0" value="1" />
 			<cdefine name="INTEL_SOC" value="1" />
@@ -11,7 +11,7 @@
 		</groupEntry>
 		<groupEntry name="Cyclone V_1" family="IntelSoC">
 			<property name="macros" value="DeviceShort=soc_cv_av" />
-			<property value="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml" name="linker_memory_map_file" />      
+			<property value="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml" name="linker_memory_map_file" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml" />
 			<cdefine name="CYCLONE_V_1" value="1" />
 			<cdefine name="INTEL_SOC" value="1" />
@@ -19,7 +19,7 @@
 		</groupEntry>
 		<groupEntry name="Arria 10_0" family="IntelSoC">
 			<property name="macros" value="DeviceShort=soc_a10" />
-			<property value="$(TargetsDir)/IntelSoC/Arria10_MemoryMap.xml" name="linker_memory_map_file" />      
+			<property value="$(TargetsDir)/IntelSoC/Arria10_MemoryMap.xml" name="linker_memory_map_file" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/Arria10_Peripherals.xml" />
 			<cdefine name="ARRIA10_0" value="1" />
 			<cdefine name="INTEL_SOC" value="1" />
@@ -27,7 +27,7 @@
 		</groupEntry>
 		<groupEntry name="Arria 10_1" family="IntelSoC">
 			<property name="macros" value="DeviceShort=soc_a10" />
-			<property value="$(TargetsDir)/IntelSoC/Arria10_MemoryMap.xml" name="linker_memory_map_file" />      
+			<property value="$(TargetsDir)/IntelSoC/Arria10_MemoryMap.xml" name="linker_memory_map_file" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/Arria10_Peripherals.xml" />
 			<cdefine name="ARRIA10_1" value="1" />
 			<cdefine name="INTEL_SOC" value="1" />
@@ -38,12 +38,24 @@
 		<groupEntry name="DDR">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/IntelSoC/sram_placement.xml" />
 			<property name="linker_section_placement_macros" value="SRAM_NAME=DDR" />
+			<property name="target_load_begin_script" value="LoadBegin()" />
+			<property name="target_load_end_script" value="LoadEnd()" />
 			<property name="arm_target_loader_applicable_loaders" value=""/>
 			<property name="arm_target_loader_default_loader" value=""/>
+		</groupEntry>
+		<groupEntry name="QSPI and DDR">
+			<property name="linker_section_placement_file" value="$(TargetsDir)/IntelSoC/sram_placement.xml" />
+			<property name="linker_section_placement_macros" value="SRAM_NAME=DDR" />
+			<property name="target_load_begin_script" value="" />
+			<property name="target_load_end_script" value="" />
+			<property name="arm_target_loader_applicable_loaders" value="Flash"/>
+			<property name="arm_target_loader_default_loader" value="Flash"/>
 		</groupEntry>
 		<groupEntry name="OCRAM">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/IntelSoC/sram_placement.xml" />
 			<property name="linker_section_placement_macros" value="SRAM_NAME=OCRAM" />
+			<property name="target_load_begin_script" value="LoadBegin()" />
+			<property name="target_load_end_script" value="LoadEnd()" />
 			<property name="arm_target_loader_applicable_loaders" value=""/>
 			<property name="arm_target_loader_default_loader" value=""/>
 			<cdefine name="NO_CACHE_ENABLE"/>

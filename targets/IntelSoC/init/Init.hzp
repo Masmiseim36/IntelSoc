@@ -1,45 +1,32 @@
 <!DOCTYPE CrossStudio_Project_File>
 <solution Name="Init" target="8" version="2">
-  <configuration Name="Common" linker_output_format="bin" />
-  <configuration Name="ARM Debug" inherited_configurations="ARM;Debug" />
   <configuration
-    Name="ARM"
+    Name="Common"
     Platform="ARM"
     arm_instruction_set="ARM"
     arm_library_instruction_set="ARM"
+    build_intermediate_directory="out/$(ProjectName) $(Configuration)"
+    build_output_directory="bin/$(ProjectName) $(Configuration)"
     c_preprocessor_definitions="__ARM"
-    hidden="Yes" />
+    gcc_cplusplus_language_standard="c++17"
+    gcc_debugging_level="Level 3"
+    linker_output_format="bin" />
   <configuration
     Name="Debug"
     c_preprocessor_definitions="DEBUG"
-    gcc_debugging_level="Level 3"
     gcc_omit_frame_pointer="Yes"
-    gcc_optimization_level="None"
-    hidden="Yes" />
-  <configuration Name="ARM Release" inherited_configurations="ARM;Release" />
+    gcc_optimization_level="Debug" />
   <configuration
     Name="Release"
     c_preprocessor_definitions="NDEBUG"
-    gcc_debugging_level="None"
     gcc_omit_frame_pointer="Yes"
-    gcc_optimization_level="Optimize For Size"
-    hidden="Yes" />
-  <configuration Name="THUMB Debug" inherited_configurations="THUMB;Debug" />
-  <configuration
-    Name="THUMB"
-    Platform="ARM"
-    arm_instruction_set="Thumb"
-    arm_library_instruction_set="Thumb"
-    c_preprocessor_definitions="__THUMB"
-    hidden="Yes" />
-  <configuration
-    Name="THUMB Release"
-    inherited_configurations="THUMB;Release" />
+    gcc_optimization_level="Optimize For Size" />
   <project Name="Init">
     <configuration
+      CMSIS_CORE_A="Yes"
       Name="Common"
       Placement="OCRAM"
-      Target="Cyclone V"
+      Target="Cyclone V_0"
       arm_architecture="v7A"
       arm_core_type="Cortex-A9"
       arm_fpu_type="VFPv3-D32"
@@ -53,18 +40,19 @@
       arm_linker_und_stack_size="1024"
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
-      build_intermediate_directory="$(Configuration)"
-      build_output_directory="$(Configuration)"
       c_additional_options="-Wall;-Wextra"
       c_preprocessor_definitions="GNU;soc_cv_av;SUPERVISOR_START;INITIALIZE_STACKS;ALT_INT_PROVISION_VECTOR_SUPPORT=0"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;./../include;./../include/soc_cv_av"
       c_user_include_directories=".;./altera_ip;./generated"
-      debug_register_definition_file="./../CyclonV_Peripherals.xml"
+      debug_register_definition_file="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml"
+      debug_type_file="$(StudioDir)/bin/libc++.xml"
       gcc_optimization_level="Debug"
-      linker_memory_map_file="./../CycloneV_MemoryMap.xml"
+      libcxx="Yes (No Exceptions)"
+      linker_memory_map_file="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml"
       linker_printf_fp_enabled="Double"
       linker_section_placement_file="./../sram_placement.xml"
       linker_section_placement_macros="SRAM_NAME=OCRAM"
+      macros="DeviceShort=soc_cv_av"
       project_directory=""
       project_type="Executable"
       property_groups_file_path="./../propertyGroups.xml"
@@ -72,6 +60,9 @@
       target_get_partname_script="GetPartName()"
       target_reset_script="Reset()"
       target_script_file="./../IntelSoC_Target.js" />
+    <configuration
+      Name="Release"
+      gcc_optimization_level="Optimize For Size" />
     <folder Name="System Files">
       <file file_name="crt0.s" />
       <file file_name="./../IntelSoC_Startup.s" />
@@ -83,9 +74,11 @@
       <file file_name="mpl_config.h" />
       <file file_name="asm.h" />
       <file file_name="board_init.c" />
-      <file file_name="mpl.c" />
+      <file file_name="mpl.cpp" />
       <file file_name="mpl_common.h" />
       <file file_name="startup.S" />
+      <file file_name="setup.h" />
+      <file file_name="setup_cyclonev.cpp" />
     </folder>
     <folder Name="altera">
       <file file_name="altera_ip/freeze_controller.c" />
@@ -123,6 +116,142 @@
       <file file_name="./../include/alt_interrupt.c" />
       <file file_name="./../include/alt_interrupt.h" />
       <file file_name="./../include/alt_printf.h" />
+    </folder>
+    <folder Name="generated">
+      <file file_name="./generated/build.h" />
+      <file file_name="./generated/iocsr_config_cyclone5.c" />
+      <file file_name="./generated/iocsr_config_cyclone5.h" />
+      <file file_name="./generated/pinmux_config.h" />
+      <file file_name="./generated/pinmux_config_cyclone5.c" />
+      <file file_name="./generated/pll_config.h" />
+      <file file_name="./generated/reset_config.h" />
+      <file file_name="./generated/sdram/sdram_config.h" />
+    </folder>
+    <folder Name="sequencer">
+      <file file_name="./sequencer/alt_types.pre.h" />
+      <file file_name="./sequencer/emif.pre.xml" />
+      <file file_name="./sequencer/sdram_io.pre.h" />
+      <file file_name="./sequencer/sequencer.pre.c" />
+      <file file_name="./sequencer/sequencer.pre.h" />
+      <file file_name="./sequencer/sequencer_auto.pre.h" />
+      <file file_name="./sequencer/sequencer_auto_ac_init.pre.c" />
+      <file file_name="./sequencer/sequencer_auto_inst_init.pre.c" />
+      <file file_name="./sequencer/sequencer_defines.pre.h" />
+      <file file_name="./sequencer/system.pre.h" />
+      <file file_name="./sequencer/tclrpt.pre.c" />
+      <file file_name="./sequencer/tclrpt.pre.h" />
+    </folder>
+  </project>
+  <project Name="Loader">
+    <configuration
+      CMSIS_CORE_A="Yes"
+      Name="Common"
+      Placement="OCRAM"
+      Target="Cyclone V_0"
+      arm_architecture="v7A"
+      arm_core_type="Cortex-A9"
+      arm_fp_abi="Hard"
+      arm_fpu_type="VFPv3-D32"
+      arm_library_check_memory_segment_overflow="No"
+      arm_linker_abt_stack_size="1024"
+      arm_linker_fiq_stack_size="1024"
+      arm_linker_heap_size="1024"
+      arm_linker_irq_stack_size="1024"
+      arm_linker_stack_size="1024"
+      arm_linker_svc_stack_size="1024"
+      arm_linker_und_stack_size="1024"
+      arm_target_loader_applicable_loaders=""
+      arm_target_loader_default_loader=""
+      c_additional_options="-Wall;-Wextra"
+      c_preprocessor_definitions="GNU;soc_cv_av;SUPERVISOR_START;INITIALIZE_STACKS;ALT_INT_PROVISION_VECTOR_SUPPORT=0;ALT_QSPI_SUPPORT_ALL"
+      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;./../include;./../include/soc_cv_av"
+      c_user_include_directories=".;./altera_ip;./generated"
+      debug_register_definition_file="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml"
+      debug_type_file="$(StudioDir)/bin/libc++.xml"
+      gcc_optimization_level="Debug"
+      libcxx="Yes (No Exceptions)"
+      linker_additional_files="$(StudioDir)/lib/libmem$(LibExt)$(LIB);$(StudioDir)/lib/libmem_loader$(LibExt)$(LIB)"
+      linker_keep_symbols="libmem_crc32"
+      linker_memory_map_file="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml"
+      linker_printf_fp_enabled="Double"
+      linker_section_placement_file="./../sram_placement.xml"
+      linker_section_placement_macros="SRAM_NAME=OCRAM"
+      macros="DeviceShort=soc_cv_av"
+      project_directory=""
+      project_type="Executable"
+      property_groups_file_path="./../propertyGroups.xml"
+      target_connect_script="Connect()"
+      target_get_partname_script="GetPartName()"
+      target_reset_script="Reset()"
+      target_script_file="./../IntelSoC_Target.js" />
+    <configuration
+      Name="Release"
+      gcc_optimization_level="Optimize For Size" />
+    <folder Name="System Files">
+      <file file_name="crt0.s" />
+      <file file_name="./../IntelSoC_Startup.s" />
+      <file file_name="./../IntelSoC_Target.js" />
+      <file file_name="./../CycloneV_MemoryMap.xml" />
+      <file file_name="./../sram_placement.xml" />
+    </folder>
+    <folder Name="libmem">
+      <file file_name="$(StudioDir)/include/libmem.h" />
+      <file file_name="$(StudioDir)/include/libmem_loader.h" />
+    </folder>
+    <folder Name="src">
+      <file file_name="mpl_config.h" />
+      <file file_name="asm.h" />
+      <file file_name="board_init.c" />
+      <file file_name="mpl_common.h" />
+      <file file_name="startup.S" />
+      <file file_name="loader.cpp" />
+      <file file_name="DebugPrint.cpp" />
+      <file file_name="DebugPrint.h" />
+      <file file_name="setup.h" />
+      <file file_name="setup_cyclonev.cpp" />
+    </folder>
+    <folder Name="altera">
+      <file file_name="altera_ip/freeze_controller.c" />
+      <file file_name="altera_ip/freeze_controller.h" />
+      <file file_name="altera_ip/scan_manager.c" />
+      <file file_name="altera_ip/scan_manager.h" />
+      <file file_name="altera_ip/sdram.c" />
+      <file file_name="altera_ip/sdram.h" />
+      <file file_name="altera_ip/sdram_phy.h" />
+      <file file_name="altera_ip/system_manager_pinmux.c" />
+    </folder>
+    <folder Name="alt">
+      <file file_name="./../include/alt_generalpurpose_io.c" />
+      <file file_name="./../include/alt_generalpurpose_io.h" />
+      <file file_name="./../include/alt_watchdog.c" />
+      <file file_name="./../include/alt_watchdog.h" />
+      <file file_name="./../include/alt_globaltmr.c" />
+      <file file_name="./../include/alt_globaltmr.h" />
+      <file file_name="./../include/alt_timers.c" />
+      <file file_name="./../include/alt_timers.h" />
+      <file file_name="./../include/alt_address_space.c" />
+      <file file_name="./../include/alt_address_space.h" />
+      <file file_name="./../include/soc_cv_av/alt_sdram.c" />
+      <file file_name="./../include/soc_cv_av/alt_sdram.h" />
+      <file file_name="./../include/soc_cv_av/alt_system_manager.c" />
+      <file file_name="./../include/soc_cv_av/alt_system_manager.h" />
+      <file file_name="./../include/soc_cv_av/alt_bridge_manager.c" />
+      <file file_name="./../include/soc_cv_av/alt_bridge_manager.h" />
+      <file file_name="./../include/soc_cv_av/alt_clock_group.h" />
+      <file file_name="./../include/soc_cv_av/alt_clock_manager.c" />
+      <file file_name="./../include/soc_cv_av/alt_clock_manager.h" />
+      <file file_name="./../include/soc_cv_av/alt_clock_manager_init.c" />
+      <file file_name="./../include/soc_cv_av/alt_fpga_manager.c" />
+      <file file_name="./../include/soc_cv_av/alt_fpga_manager.h" />
+      <file file_name="./../include/alt_interrupt.c" />
+      <file file_name="./../include/alt_interrupt.h" />
+      <file file_name="./../include/alt_printf.h" />
+      <file file_name="../include/alt_16550_uart.c">
+        <configuration Name="Common" gcc_optimization_level="None" />
+      </file>
+      <file file_name="../include/alt_16550_uart.h" />
+      <file file_name="../include/alt_qspi.c" />
+      <file file_name="../include/alt_qspi.h" />
     </folder>
     <folder Name="generated">
       <file file_name="./generated/build.h" />

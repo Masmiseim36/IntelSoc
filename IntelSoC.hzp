@@ -236,8 +236,12 @@
         </folder>
       </folder>
       <folder Name="Init">
-        <file file_name="targets/IntelSoC/init/ARM Release/Init.bin" />
+        <file file_name="targets/IntelSoC/init/bin/Init Release/Init.bin" />
+      </folder>
+      <folder Name="Loader">
+        <file file_name="targets/IntelSoC/init/bin/Loader Release/Loader.elf" />
       </folder>
     </folder>
   </project>
+  <import file_name="targets/IntelSoC/init/Init.hzp" />
 </solution>
