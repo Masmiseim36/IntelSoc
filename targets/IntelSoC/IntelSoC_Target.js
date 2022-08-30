@@ -22,36 +22,46 @@ function Connect ()
 	TargetInterface.setDeviceTypeProperty (TargetShort);
 
 
-
-//	if (TargetInterface.implementation() != "j-link")
+	if ((TargetInterface.implementation() != "j-link") && (TargetShort == "Arria 10"))
 	{
-		TargetInterface.setDebugInterfaceProperty ("set_adiv5_APB_ap_num", 1);
+		// TargetInterface.selectDevice(irPre, irPost, drPre, drPost) sets the instruction and data register
+		// (number of devices) pre and post bits.
 
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80001000); // ETF
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80002000); // CTI
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80003000); // TPIU
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80004000); // CSTF
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80005000); // STM
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80006000); // ETR
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80007000); // FPGA-CTI
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80080000); // FPGA-ROM
-		if (TargetCore == "0")
-		{
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80100000); // A9 ROM
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80110000); // CPU0 Debug
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80111000); // CPU0_PMU
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80118000); // CTI0
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011C000); // PTM0
-		}
-		else
-		{
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80100000); // A9 ROM
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80112000); // CPU1 Debug
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80113000); // CPU1_PMU
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0x80119000); // CTI1
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011D000); // PTM1
-		}
+		// “Devices before” refers to the number of JTAG devices that the TDI signal has to pass through in the
+		// daisy-chain before reaching the target device. Similarly, “devices after” is the number of devices that
+		// the signal has to pass through after the target device before reaching the JTAG-TDO pin.
+
+		// Instruction bits “before” and “after” refers to the total sum of all JTAG devices’ instruction register
+		// lengths, which are connected before and after the target device in the daisy-chain.
+		TargetInterface.selectDevice (0, 10, 0, 1);
 	}
+
+	TargetInterface.setDebugInterfaceProperty ("set_adiv5_APB_ap_num", 1);
+
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80001000); // ETF
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80002000); // CTI
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80003000); // TPIU
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80004000); // CSTF
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80005000); // STM
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80006000); // ETR
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80007000); // FPGA-CTI
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80080000); // FPGA-ROM
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80100000); // A9 ROM
+	if (TargetCore == "0")
+	{
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80110000); // CPU0 Debug
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80111000); // CPU0_PMU
+	}
+	else
+	{
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80112000); // CPU1 Debug
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80113000); // CPU1_PMU
+		
+	}
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80118000); // CTI0 --> Cross-Trigger Interface 0
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80119000); // CTI1 --> Cross-Trigger Interface 1
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011C000); // PTM0 --> Program Trace Macrocell 0
+	TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011D000); // PTM1 --> Program Trace Macrocell 1
 }
 
 // This function is used to return the controller type as a string
@@ -97,9 +107,9 @@ function Reset ()
 	if (TargetCore == "0")
 	{
 		TargetInterface.resetAndStop (100);
-		var i = TargetInterface.executeMRC(MRC(15, 0, 1, 0, 0)); // Read control register
-		TargetInterface.executeMCR(MCR(15, 0, 1, 0, 0), i & ~(1<<0|1<<2|1<<12)); // Write control register
-		TargetInterface.executeMCR(MCR(15, 0, 7, 5, 0)); // Invalidate ICache
+		var i = TargetInterface.executeMRC(MRC(15, 0, 1, 0, 0));                  // Read control register
+		TargetInterface.executeMCR(MCR(15, 0, 1, 0, 0), i & ~(1<<0|1<<2|1<<12));  // Write control register
+		TargetInterface.executeMCR(MCR(15, 0, 7, 5, 0));                          // Invalidate ICache
 	}
 }
 
@@ -151,6 +161,10 @@ function LoadEnd ()
 
 function InitializeDdrMemory ()
 {
+	var TargetFullName = TargetInterface.getProjectProperty ("Target");
+	var TargetShort    = TargetFullName.substring (0, TargetFullName.length-2);
+	var TargetCore     = TargetFullName.substring (TargetFullName.length-1);
+	
 	if (TargetInterface.implementation() == "crossworks_simulator")
 	{
 		return;
