@@ -30,6 +30,14 @@ OF SUCH DAMAGE. */
 #if defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0
 	#include "alt_16550_uart.h"
 
+	#if defined CYCLONE_V_0 || defined CYCLONE_V_1
+		constexpr int UartIndex = 0;
+	#elif defined ARRIA10_0 || defined ARRIA10_1
+		constexpr int UartIndex = 1;
+	#else
+		#error "Unknown Controller"
+	#endif
+
 	static constexpr ALT_16550_DEVICE_e Devicelist [] {ALT_16550_DEVICE_SOCFPGA_UART0, ALT_16550_DEVICE_SOCFPGA_UART1};
 	ALT_16550_HANDLE_t handle{};
 
@@ -40,11 +48,11 @@ OF SUCH DAMAGE. */
 	bool ConfigUart (void)
 	{
 		ALT_STATUS_CODE status;
-		status  = alt_16550_init				(Devicelist[0], nullptr, 0, &handle);
+		status  = alt_16550_init				(Devicelist[UartIndex], nullptr, 0, &handle);
 		status |= alt_16550_line_config_set (&handle, ALT_16550_DATABITS_8, ALT_16550_PARITY_DISABLE, ALT_16550_STOPBITS_1);
-		status |= alt_16550_baudrate_set	 (&handle, ALT_16550_BAUDRATE_115200);
-		status |= alt_16550_fifo_enable	  (&handle);
-		status |= alt_16550_enable			 (&handle);
+		status |= alt_16550_baudrate_set	   (&handle, ALT_16550_BAUDRATE_115200);
+		status |= alt_16550_fifo_enable	   (&handle);
+		status |= alt_16550_enable			   (&handle);
 
 		return (status == ALT_E_SUCCESS);
 	}

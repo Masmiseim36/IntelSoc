@@ -171,7 +171,7 @@ function InitializeDdrMemory ()
 	}
 
 	TargetInterface.message ("## load initialization App");
-	TargetInterface.pokeBinary (0xFFFF0000, "$(TargetsDir)/IntelSoC/init/bin/Init ARM Release/Init.bin");
+	TargetInterface.pokeBinary (0xFFFF0000, "$(TargetsDir)/IntelSoC/init/bin/Init CycloneV Release/Init.bin");
 	TargetInterface.message ("## start initialization App");
 	var ret = TargetInterface.runFromAddress (0xFFFF0000, 10000);
 	TargetInterface.message ("## initialization done: " + ret);

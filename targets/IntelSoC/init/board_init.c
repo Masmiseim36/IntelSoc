@@ -41,7 +41,9 @@
 #include <socal/hps.h>
 #include <socal/alt_rstmgr.h>
 #include <socal/alt_clkmgr.h>
-#include <socal/alt_l3.h>
+#if __has_include ("socal/alt_l3.h")
+	#include <socal/alt_l3.h>
+#endif
 #include <socal/alt_sysmgr.h>
 // include needed hwlib headers
 #include <hwlib.h>

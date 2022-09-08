@@ -236,10 +236,11 @@
         </folder>
       </folder>
       <folder Name="Init">
-        <file file_name="targets/IntelSoC/init/bin/Init Release/Init.bin" />
+        <file file_name="targets/IntelSoC/init/bin/Init CycloneV Release/Init.bin" />
       </folder>
       <folder Name="Loader">
-        <file file_name="targets/IntelSoC/init/bin/Loader Release/Loader.elf" />
+        <file file_name="targets/IntelSoC/init/bin/Loader CycloneV Release/Loader.elf" />
+        <file file_name="targets/IntelSoC/init/bin/Loader Arria10 Release/Loader.elf" />
       </folder>
     </folder>
   </project>

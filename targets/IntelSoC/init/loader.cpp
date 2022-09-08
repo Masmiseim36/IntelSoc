@@ -61,18 +61,17 @@ int main ([[maybe_unused]]uint32_t flags, uint32_t param)
 	SetupController ();
 
 	ConfigUart ();
-   DebugPrint  ("Hello Cyclone-V Flash-Loader\r\n");
 	DebugPrintf ("Hello Cyclone-V Flash-Loader\r\nCalled with Param 0x%X", param);
 
 	alt_qspi_init ();
 	alt_qspi_enable ();
 
 	libmem_driver_handle_t flashHandle;
-	libmem_register_driver (&flashHandle, (uint8_t *)0x00100000, 0x2000000, geometry, nullptr, &DriverFunctions, nullptr);
+	// The QSPI-Flash is not memmory-mapped. Use the DDR-Address-Range instead
+	libmem_register_driver (&flashHandle, (uint8_t *)RamStart, 0x2000000, geometry, nullptr, &DriverFunctions, &DriverFunctions_Extended);
 	libmem_driver_paged_write_init (&PageWriteControlBlock, write_buffer, sizeof(write_buffer), ProgramPage, 4, 0);
 
-   #if 1
-	//#ifdef DEBUG
+	#ifdef DEBUG
 		// testcode for libmem driver
 		static uint32_t TestMem [4096/sizeof(uint32_t)];
 		static const uint8_t *MemPointer = (const uint8_t *)(1024*1024);
@@ -101,7 +100,7 @@ int main ([[maybe_unused]]uint32_t flags, uint32_t param)
 static int ProgramPage ([[maybe_unused]]libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr)
 {
 	DebugPrintf ("Programm page at 0x%X\r\n", dest_addr);
-	memcpy (dest_addr, src_addr, FlashPageSize);
+//	memcpy (dest_addr, src_addr, FlashPageSize);
 
 	if (alt_qspi_write (reinterpret_cast<uint32_t>(dest_addr) - RamStart, src_addr, 256) == ALT_E_SUCCESS)
 		return LIBMEM_STATUS_SUCCESS;
@@ -123,7 +122,7 @@ static int libmem_ProgramPage ([[maybe_unused]]libmem_driver_handle_t *h, uint8_
 static int EraseSector ([[maybe_unused]]libmem_driver_handle_t *h, libmem_sector_info_t *si)
 {
 	DebugPrintf ("Erase setor at 0x%X\r\n", si->start);
-	memset (si->start, 0xFF, si->size); // Set DDR memory to 0xFF
+//	memset (si->start, 0xFF, si->size); // Set DDR memory to 0xFF
 
 	if (alt_qspi_erase_sector (reinterpret_cast<uint32_t>(si->start) - RamStart) == ALT_E_SUCCESS)
 		return LIBMEM_STATUS_SUCCESS;
@@ -154,7 +153,7 @@ The LIBMEM driver's flush function.
 static int libmem_Read ([[maybe_unused]]libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
 {
 	DebugPrintf ("libmem_Read at 0x%X\r\n", src);
-	memcpy (dest, src, size);
+//	memcpy (dest, src, size);
 
 	if (alt_qspi_read (dest, reinterpret_cast<uint32_t>(src) - RamStart, size) == ALT_E_SUCCESS)
 		return LIBMEM_STATUS_SUCCESS;

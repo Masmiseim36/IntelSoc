@@ -39,7 +39,9 @@
 
 #include <socal/socal.h>
 #include <socal/hps.h>
-#include <socal/alt_scanmgr.h>
+#if __has_include ("socal/alt_scanmgr.h")
+	#include <socal/alt_scanmgr.h>
+#endif
 #include <hwlib.h>
 
 /**

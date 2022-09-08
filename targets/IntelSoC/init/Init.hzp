@@ -8,6 +8,8 @@
     build_intermediate_directory="out/$(ProjectName) $(Configuration)"
     build_output_directory="bin/$(ProjectName) $(Configuration)"
     c_preprocessor_definitions="__ARM"
+    clang_tidy_checks_cpp="*;-llvm*;-fuchsia*;-modernize-use-trailing-return-type;-*braces-around-statements;-*magic-numbers;-cppcoreguidelines-pro-bounds-constant-array-index;-google-readability-namespace-comments"
+    cpp_only_additional_options="-Woverloaded-virtual;-Wnon-virtual-dtor"
     gcc_cplusplus_language_standard="c++17"
     gcc_debugging_level="Level 3"
     linker_output_format="bin" />
@@ -15,18 +17,51 @@
     Name="Debug"
     c_preprocessor_definitions="DEBUG"
     gcc_omit_frame_pointer="Yes"
-    gcc_optimization_level="Debug" />
+    gcc_optimization_level="Debug"
+    hidden="Yes" />
   <configuration
     Name="Release"
     c_preprocessor_definitions="NDEBUG"
     gcc_omit_frame_pointer="Yes"
-    gcc_optimization_level="Optimize For Size" />
+    gcc_optimization_level="Optimize For Size"
+    hidden="Yes" />
+  <configuration
+    Name="CycloneV"
+    Target="Cyclone V_0"
+    c_preprocessor_definitions="CYCLONE_V_0=1;INTEL_SOC=1;soc_cv_av=1"
+    c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;./../include;./../include/soc_cv_av"
+    c_user_include_directories="./generated_CycloneV"
+    debug_register_definition_file="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml"
+    hidden="Yes"
+    linker_memory_map_file="./../CycloneV_MemoryMap.xml"
+    macros="DeviceShort=soc_cv_av" />
+  <configuration
+    Name="Arria10"
+    Target="Arria 10_0"
+    c_preprocessor_definitions="ARRIA10_0=1;INTEL_SOC=1;soc_a10=1"
+    c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;./../include;./../include/soc_a10"
+    c_user_include_directories="./generated_Arria10"
+    debug_register_definition_file="$(TargetsDir)/IntelSoC/Arria10_Peripherals.xml"
+    hidden="Yes"
+    linker_memory_map_file="./../Arria10_MemoryMap.xml"
+    macros="DeviceShort=soc_a10" />
+  <configuration
+    Name="CycloneV Release"
+    inherited_configurations="CycloneV;Release" />
+  <configuration
+    Name="CycloneV Debug"
+    inherited_configurations="CycloneV;Debug" />
+  <configuration
+    Name="Arria10 Release"
+    inherited_configurations="Arria10;Release" />
+  <configuration
+    Name="Arria10 Debug"
+    inherited_configurations="Arria10;Debug" />
   <project Name="Init">
     <configuration
       CMSIS_CORE_A="Yes"
       Name="Common"
       Placement="OCRAM"
-      Target="Cyclone V_0"
       arm_architecture="v7A"
       arm_core_type="Cortex-A9"
       arm_fpu_type="VFPv3-D32"
@@ -41,33 +76,35 @@
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
       c_additional_options="-Wall;-Wextra"
-      c_preprocessor_definitions="GNU;soc_cv_av;SUPERVISOR_START;INITIALIZE_STACKS;ALT_INT_PROVISION_VECTOR_SUPPORT=0"
-      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;./../include;./../include/soc_cv_av"
+      c_preprocessor_definitions="GNU;SUPERVISOR_START;INITIALIZE_STACKS;ALT_INT_PROVISION_VECTOR_SUPPORT=0"
       c_user_include_directories=".;./altera_ip;./generated"
-      debug_register_definition_file="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml"
       debug_type_file="$(StudioDir)/bin/libc++.xml"
-      gcc_optimization_level="Debug"
       libcxx="Yes (No Exceptions)"
-      linker_memory_map_file="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml"
       linker_printf_fp_enabled="Double"
       linker_section_placement_file="./../sram_placement.xml"
       linker_section_placement_macros="SRAM_NAME=OCRAM"
-      macros="DeviceShort=soc_cv_av"
       project_directory=""
       project_type="Executable"
-      property_groups_file_path="./../propertyGroups.xml"
+      property_groups_file_path="$(ProjectDir)/../propertyGroups.xml"
       target_connect_script="Connect()"
       target_get_partname_script="GetPartName()"
       target_reset_script="Reset()"
-      target_script_file="./../IntelSoC_Target.js" />
+      target_script_file="$(ProjectDir)/../IntelSoC_Target.js" />
     <configuration
       Name="Release"
       gcc_optimization_level="Optimize For Size" />
     <folder Name="System Files">
       <file file_name="crt0.s" />
       <file file_name="./../IntelSoC_Startup.s" />
-      <file file_name="./../IntelSoC_Target.js" />
-      <file file_name="./../CycloneV_MemoryMap.xml" />
+      <file file_name="$(ProjectDir)/../IntelSoC_Target.js" />
+      <file file_name="./../CycloneV_MemoryMap.xml">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="CycloneV" build_exclude_from_build="No" />
+      </file>
+      <file file_name="./../Arria10_MemoryMap.xml">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="Arria10" build_exclude_from_build="No" />
+      </file>
       <file file_name="./../sram_placement.xml" />
     </folder>
     <folder Name="src">
@@ -101,18 +138,18 @@
       <file file_name="./../include/alt_timers.h" />
       <file file_name="./../include/alt_address_space.c" />
       <file file_name="./../include/alt_address_space.h" />
-      <file file_name="./../include/soc_cv_av/alt_sdram.c" />
-      <file file_name="./../include/soc_cv_av/alt_sdram.h" />
-      <file file_name="./../include/soc_cv_av/alt_system_manager.c" />
-      <file file_name="./../include/soc_cv_av/alt_system_manager.h" />
-      <file file_name="./../include/soc_cv_av/alt_bridge_manager.c" />
-      <file file_name="./../include/soc_cv_av/alt_bridge_manager.h" />
-      <file file_name="./../include/soc_cv_av/alt_clock_group.h" />
-      <file file_name="./../include/soc_cv_av/alt_clock_manager.c" />
-      <file file_name="./../include/soc_cv_av/alt_clock_manager.h" />
-      <file file_name="./../include/soc_cv_av/alt_clock_manager_init.c" />
-      <file file_name="./../include/soc_cv_av/alt_fpga_manager.c" />
-      <file file_name="./../include/soc_cv_av/alt_fpga_manager.h" />
+      <file file_name="./../include/$(DeviceShort)/alt_sdram.c" />
+      <file file_name="./../include/$(DeviceShort)/alt_sdram.h" />
+      <file file_name="./../include/$(DeviceShort)/alt_system_manager.c" />
+      <file file_name="./../include/$(DeviceShort)/alt_system_manager.h" />
+      <file file_name="./../include/$(DeviceShort)/alt_bridge_manager.c" />
+      <file file_name="./../include/$(DeviceShort)/alt_bridge_manager.h" />
+      <file file_name="./../include/$(DeviceShort)/alt_clock_group.h" />
+      <file file_name="./../include/$(DeviceShort)/alt_clock_manager.c" />
+      <file file_name="./../include/$(DeviceShort)/alt_clock_manager.h" />
+      <file file_name="./../include/$(DeviceShort)/alt_clock_manager_init.c" />
+      <file file_name="./../include/$(DeviceShort)/alt_fpga_manager.c" />
+      <file file_name="./../include/$(DeviceShort)/alt_fpga_manager.h" />
       <file file_name="./../include/alt_interrupt.c" />
       <file file_name="./../include/alt_interrupt.h" />
       <file file_name="./../include/alt_printf.h" />
@@ -147,7 +184,6 @@
       CMSIS_CORE_A="Yes"
       Name="Common"
       Placement="OCRAM"
-      Target="Cyclone V_0"
       arm_architecture="v7A"
       arm_core_type="Cortex-A9"
       arm_fp_abi="Hard"
@@ -163,35 +199,37 @@
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
       c_additional_options="-Wall;-Wextra"
-      c_preprocessor_definitions="GNU;soc_cv_av;SUPERVISOR_START;INITIALIZE_STACKS;ALT_INT_PROVISION_VECTOR_SUPPORT=0;ALT_QSPI_SUPPORT_ALL"
-      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;./../include;./../include/soc_cv_av"
+      c_preprocessor_definitions="GNU;SUPERVISOR_START;INITIALIZE_STACKS;ALT_INT_PROVISION_VECTOR_SUPPORT=0;ALT_QSPI_SUPPORT_ALL"
       c_user_include_directories=".;./altera_ip;./generated"
-      debug_register_definition_file="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml"
       debug_type_file="$(StudioDir)/bin/libc++.xml"
-      gcc_optimization_level="Debug"
       libcxx="Yes (No Exceptions)"
       linker_additional_files="$(StudioDir)/lib/libmem$(LibExt)$(LIB);$(StudioDir)/lib/libmem_loader$(LibExt)$(LIB)"
       linker_keep_symbols="libmem_crc32"
-      linker_memory_map_file="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml"
       linker_printf_fp_enabled="Double"
       linker_section_placement_file="./../sram_placement.xml"
       linker_section_placement_macros="SRAM_NAME=OCRAM"
-      macros="DeviceShort=soc_cv_av"
       project_directory=""
       project_type="Executable"
-      property_groups_file_path="./../propertyGroups.xml"
+      property_groups_file_path="$(ProjectDir)/../propertyGroups.xml"
       target_connect_script="Connect()"
       target_get_partname_script="GetPartName()"
       target_reset_script="Reset()"
-      target_script_file="./../IntelSoC_Target.js" />
+      target_script_file="$(ProjectDir)/../IntelSoC_Target.js" />
     <configuration
       Name="Release"
       gcc_optimization_level="Optimize For Size" />
     <folder Name="System Files">
       <file file_name="crt0.s" />
       <file file_name="./../IntelSoC_Startup.s" />
-      <file file_name="./../IntelSoC_Target.js" />
-      <file file_name="./../CycloneV_MemoryMap.xml" />
+      <file file_name="$(ProjectDir)/../IntelSoC_Target.js" />
+      <file file_name="./../CycloneV_MemoryMap.xml">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="CycloneV" build_exclude_from_build="No" />
+      </file>
+      <file file_name="./../Arria10_MemoryMap.xml">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="Arria10" build_exclude_from_build="No" />
+      </file>
       <file file_name="./../sram_placement.xml" />
     </folder>
     <folder Name="libmem">
@@ -201,14 +239,24 @@
     <folder Name="src">
       <file file_name="mpl_config.h" />
       <file file_name="asm.h" />
-      <file file_name="board_init.c" />
+      <file file_name="board_init.c">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="CycloneV" build_exclude_from_build="No" />
+      </file>
       <file file_name="mpl_common.h" />
       <file file_name="startup.S" />
       <file file_name="loader.cpp" />
       <file file_name="DebugPrint.cpp" />
       <file file_name="DebugPrint.h" />
       <file file_name="setup.h" />
-      <file file_name="setup_cyclonev.cpp" />
+      <file file_name="setup_cyclonev.cpp">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="CycloneV" build_exclude_from_build="No" />
+      </file>
+      <file file_name="setup_arria10.cpp">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="Arria10" build_exclude_from_build="No" />
+      </file>
     </folder>
     <folder Name="altera">
       <file file_name="altera_ip/freeze_controller.c" />
@@ -219,6 +267,8 @@
       <file file_name="altera_ip/sdram.h" />
       <file file_name="altera_ip/sdram_phy.h" />
       <file file_name="altera_ip/system_manager_pinmux.c" />
+      <configuration Name="Common" build_exclude_from_build="Yes" />
+      <configuration Name="CycloneV" build_exclude_from_build="No" />
     </folder>
     <folder Name="alt">
       <file file_name="./../include/alt_generalpurpose_io.c" />
@@ -231,18 +281,21 @@
       <file file_name="./../include/alt_timers.h" />
       <file file_name="./../include/alt_address_space.c" />
       <file file_name="./../include/alt_address_space.h" />
-      <file file_name="./../include/soc_cv_av/alt_sdram.c" />
-      <file file_name="./../include/soc_cv_av/alt_sdram.h" />
-      <file file_name="./../include/soc_cv_av/alt_system_manager.c" />
-      <file file_name="./../include/soc_cv_av/alt_system_manager.h" />
-      <file file_name="./../include/soc_cv_av/alt_bridge_manager.c" />
-      <file file_name="./../include/soc_cv_av/alt_bridge_manager.h" />
-      <file file_name="./../include/soc_cv_av/alt_clock_group.h" />
-      <file file_name="./../include/soc_cv_av/alt_clock_manager.c" />
-      <file file_name="./../include/soc_cv_av/alt_clock_manager.h" />
-      <file file_name="./../include/soc_cv_av/alt_clock_manager_init.c" />
-      <file file_name="./../include/soc_cv_av/alt_fpga_manager.c" />
-      <file file_name="./../include/soc_cv_av/alt_fpga_manager.h" />
+      <file file_name="./../include/$(DeviceShort)/alt_sdram.c" />
+      <file file_name="./../include/$(DeviceShort)/alt_sdram.h" />
+      <file file_name="./../include/$(DeviceShort)/alt_system_manager.c" />
+      <file file_name="./../include/$(DeviceShort)/alt_system_manager.h" />
+      <file file_name="./../include/$(DeviceShort)/alt_bridge_manager.c" />
+      <file file_name="./../include/$(DeviceShort)/alt_bridge_manager.h" />
+      <file file_name="./../include/$(DeviceShort)/alt_clock_group.h" />
+      <file file_name="./../include/$(DeviceShort)/alt_clock_manager.c" />
+      <file file_name="./../include/$(DeviceShort)/alt_clock_manager.h" />
+      <file file_name="./../include/$(DeviceShort)/alt_clock_manager_init.c">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="CycloneV" build_exclude_from_build="No" />
+      </file>
+      <file file_name="./../include/$(DeviceShort)/alt_fpga_manager.c" />
+      <file file_name="./../include/$(DeviceShort)/alt_fpga_manager.h" />
       <file file_name="./../include/alt_interrupt.c" />
       <file file_name="./../include/alt_interrupt.h" />
       <file file_name="./../include/alt_printf.h" />
@@ -276,6 +329,14 @@
       <file file_name="./sequencer/system.pre.h" />
       <file file_name="./sequencer/tclrpt.pre.c" />
       <file file_name="./sequencer/tclrpt.pre.h" />
+      <configuration Name="Common" build_exclude_from_build="Yes" />
+      <configuration Name="CycloneV" build_exclude_from_build="No" />
+    </folder>
+    <folder Name="generated_arria10">
+      <file file_name="generated_Arria10/clock_manager_arria10.c" />
+      <file file_name="generated_Arria10/clock_manager_arria10.h" />
+      <configuration Name="Common" build_exclude_from_build="Yes" />
+      <configuration Name="Arria10" build_exclude_from_build="No" />
     </folder>
   </project>
 </solution>

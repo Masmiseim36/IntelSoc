@@ -34,7 +34,6 @@
 		<property name="linker_scanf_fp_enabled" />
 		<property name="linker_scanf_character_group_matching_enabled" />
 		<property name="arm_target_loader_parameter" value="0" configuration="Flash" />
-		<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/IntelSoC/init/bin/Loader Release/Loader.elf" configuration="Flash" />
 		<folder name="Source Files" filter="c;cpp;cxx;cc;h;s;asm;inc">
 			<file name="main.c" source="$(StudioDir)/samples/Shared/main.c" />
 		</folder>

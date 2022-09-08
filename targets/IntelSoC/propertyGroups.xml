@@ -5,6 +5,7 @@
 			<property name="macros" value="DeviceShort=soc_cv_av" />
 			<property value="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml" name="linker_memory_map_file" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml" />
+			<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/IntelSoC/init/bin/Loader CycloneV Release/Loader.elf" configuration="Flash" />
 			<cdefine name="CYCLONE_V_0" value="1" />
 			<cdefine name="INTEL_SOC" value="1" />
 			<cdefine name="soc_cv_av" value="1" />
@@ -13,6 +14,7 @@
 			<property name="macros" value="DeviceShort=soc_cv_av" />
 			<property value="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml" name="linker_memory_map_file" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml" />
+			<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/IntelSoC/init/bin/Loader CycloneV Release/Loader.elf" configuration="Flash" />
 			<cdefine name="CYCLONE_V_1" value="1" />
 			<cdefine name="INTEL_SOC" value="1" />
 			<cdefine name="soc_cv_av" value="1" />
@@ -21,6 +23,7 @@
 			<property name="macros" value="DeviceShort=soc_a10" />
 			<property value="$(TargetsDir)/IntelSoC/Arria10_MemoryMap.xml" name="linker_memory_map_file" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/Arria10_Peripherals.xml" />
+			<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/IntelSoC/init/bin/Loader Arria10 Release/Loader.elf" configuration="Flash" />
 			<cdefine name="ARRIA10_0" value="1" />
 			<cdefine name="INTEL_SOC" value="1" />
 			<cdefine name="soc_a10" value="1" />
@@ -29,6 +32,7 @@
 			<property name="macros" value="DeviceShort=soc_a10" />
 			<property value="$(TargetsDir)/IntelSoC/Arria10_MemoryMap.xml" name="linker_memory_map_file" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/Arria10_Peripherals.xml" />
+			<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/IntelSoC/init/bin/Loader Arria10 Release/Loader.elf" configuration="Flash" />
 			<cdefine name="ARRIA10_1" value="1" />
 			<cdefine name="INTEL_SOC" value="1" />
 			<cdefine name="soc_a10" value="1" />
