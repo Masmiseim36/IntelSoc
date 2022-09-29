@@ -12,6 +12,7 @@
     cpp_only_additional_options="-Woverloaded-virtual;-Wnon-virtual-dtor"
     gcc_cplusplus_language_standard="c++17"
     gcc_debugging_level="Level 3"
+    linker_keep_symbols="libmem_erase;libmem_erase_all;libmem_write;libmem_flush;libmem_crc32;libmem_lock;libmem_unlock;libmem_get_driver_sector_size"
     linker_output_format="bin" />
   <configuration
     Name="Debug"

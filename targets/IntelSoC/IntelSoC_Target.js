@@ -44,9 +44,9 @@ function Connect ()
 	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80004000); // CSTF
 	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80005000); // STM
 	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80006000); // ETR
-	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80007000); // FPGA-CTI
-	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80080000); // FPGA-ROM
-	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80100000); // A9 ROM
+//	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80007000); // FPGA-CTI
+//	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80080000); // FPGA-ROM
+//	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80100000); // A9 ROM
 	if (TargetCore == "0")
 	{
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80110000); // CPU0 Debug
