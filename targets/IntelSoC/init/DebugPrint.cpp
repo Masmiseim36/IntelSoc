@@ -48,11 +48,11 @@ OF SUCH DAMAGE. */
 	bool ConfigUart (void)
 	{
 		ALT_STATUS_CODE status;
-		status  = alt_16550_init				(Devicelist[UartIndex], nullptr, 0, &handle);
+		status  = alt_16550_init			(Devicelist[UartIndex], nullptr, 0, &handle);
 		status |= alt_16550_line_config_set (&handle, ALT_16550_DATABITS_8, ALT_16550_PARITY_DISABLE, ALT_16550_STOPBITS_1);
-		status |= alt_16550_baudrate_set	   (&handle, ALT_16550_BAUDRATE_115200);
-		status |= alt_16550_fifo_enable	   (&handle);
-		status |= alt_16550_enable			   (&handle);
+		status |= alt_16550_baudrate_set	(&handle, ALT_16550_BAUDRATE_115200);
+		status |= alt_16550_fifo_enable		(&handle);
+		status |= alt_16550_enable			(&handle);
 
 		return (status == ALT_E_SUCCESS);
 	}

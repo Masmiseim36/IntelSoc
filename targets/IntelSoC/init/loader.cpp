@@ -11,6 +11,7 @@ extern "C"
 static int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
 static int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size);
 static int libmem_Read        (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
+static uint32_t libmem_CRC32  (libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc);
 
 static int EraseSector        (libmem_driver_handle_t *h, libmem_sector_info_t *si);
 static int ProgramPage        (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr);
@@ -43,7 +44,7 @@ static const libmem_ext_driver_functions_t DriverFunctions_Extended
 {
 	nullptr,
 	libmem_Read,
-	nullptr //libmem_CRC32
+	libmem_CRC32
 };
 
 extern uint32_t __DDR_segment_start__[];
@@ -54,14 +55,14 @@ const uint32_t RamStart = reinterpret_cast<uint32_t>(&__DDR_segment_start__[0]);
 int main ([[maybe_unused]]uint32_t flags, uint32_t param)
 {
 #pragma GCC diagnostic pop
-	// Do board initialization (plls, sdram, pinmux/io, etc.. )
+	// Do board initialization (plls, pinmux/io, DDR-RAM (not Arria-10) etc.. )
 	// Process the launch information.
 	// Update the ISW Handoff registers.
-	// Setup Lightweigth HPS-to-FPGA and HPS-to-FPGA bridge 
+	// Setup Lightweight HPS-to-FPGA and HPS-to-FPGA bridge 
 	SetupController ();
 
 	ConfigUart ();
-	DebugPrintf ("Hello Cyclone-V Flash-Loader\r\nCalled with Param 0x%X", param);
+	DebugPrintf ("Hello Intel SoC Flash-Loader\r\nCalled with Param 0x%X\r\n", param);
 
 	alt_qspi_init ();
 	alt_qspi_enable ();
@@ -82,7 +83,7 @@ int main ([[maybe_unused]]uint32_t flags, uint32_t param)
 		libmem_read (reinterpret_cast<uint8_t *>(&TestMem), MemPointer, 4096);
 
 		for (int i=0; i<sizeof(TestMem)/sizeof(TestMem[0]); i++)
-				TestMem[i] = 0xDEADBEEF;
+			TestMem[i] = 0xDEADBEEF;
 
 		libmem_write ((uint8_t *)MemPointer, (const uint8_t *)TestMem, 4096);
 		libmem_read (reinterpret_cast<uint8_t *>(&TestMem), MemPointer, 4096);
@@ -150,6 +151,20 @@ The LIBMEM driver's flush function.
 //	DebugPrint ("libmem_Flush");
 //	return LIBMEM_STATUS_SUCCESS;
 //}
+
+
+/*! libmem_Read
+\brief The LIBMEM driver's read extended function
+\param h    A pointer to the handle of the LIBMEM driver.
+\param dest A pointer to the initial memory address to write data to.
+\param src  A pointer to the initial memory address in the memory range handled by the driver to read data from.
+\param size The number of bytes to write.
+\return     The LIBMEM status result.
+The driver's \a read function is an optional extended function.
+It has been provided to allow you to write a driver for memory that is not memory mapped.
+
+Typically memory read operations will be direct memory mapped operations however implementing a driver's \a read function
+allows you to access non-memory mapped memory through the LIBMEM interface. */
 static int libmem_Read ([[maybe_unused]]libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
 {
 	DebugPrintf ("libmem_Read at 0x%X\r\n", src);
@@ -159,4 +174,38 @@ static int libmem_Read ([[maybe_unused]]libmem_driver_handle_t *h, uint8_t *dest
 		return LIBMEM_STATUS_SUCCESS;
 	return LIBMEM_STATUS_ERROR;
 }
-//static uint32_t libmem_CRC32  ([[maybe_unused]]libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc);
+
+/*! libmem_CRC32
+\brief The LIBMEM driver's crc32 extended function
+\b \this is a function pointer to a LIBMEM driver's crc32 extended function.
+\param h     A pointer to the handle of the LIBMEM driver.
+\param start A pointer to the start of the address range.
+\param size  The size of the address range in bytes.
+\param crc   The initial CRC-32 value.
+\return      The computed CRC-32 value.
+The driver's \a crc function is an optional extended function.
+It has been provided to allow you to write a driver for memory that is not memory mapped.
+
+Typically memory read operations will be direct memory mapped  operations however implementing a driver's \a crc function
+allows you to carry out a crc32 operation on non-memory mapped memory through the LIBMEM interface. */
+static uint32_t libmem_CRC32 ([[maybe_unused]]libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc)
+{
+	DebugPrintf ("libmem_CRC32 at 0x%X - size: %d\r\n", start, size);
+
+	static uint8_t page_buffer[4096];
+	static constexpr size_t BufferSize = sizeof (page_buffer);
+
+	while (size >= BufferSize)
+	{
+		libmem_Read(h, page_buffer, (uint8_t*)start, BufferSize);
+		crc = libmem_crc32_direct(page_buffer,  BufferSize, crc);
+		start += BufferSize;
+		size  -= BufferSize;
+	}
+	if (size)
+	{
+		libmem_Read(h, page_buffer, (uint8_t*)start, BufferSize);
+		crc = libmem_crc32_direct(page_buffer, size, crc);
+	}
+	return crc;
+}

@@ -5,6 +5,7 @@
     Platform="ARM"
     arm_instruction_set="ARM"
     arm_library_instruction_set="ARM"
+    batch_build_configurations="CycloneV Release;Arria10 Release"
     build_intermediate_directory="out/$(ProjectName) $(Configuration)"
     build_output_directory="bin/$(ProjectName) $(Configuration)"
     c_preprocessor_definitions="__ARM"

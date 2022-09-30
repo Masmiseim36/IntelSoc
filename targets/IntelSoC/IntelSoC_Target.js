@@ -111,6 +111,76 @@ function Reset ()
 		TargetInterface.executeMCR(MCR(15, 0, 1, 0, 0), i & ~(1<<0|1<<2|1<<12));  // Write control register
 		TargetInterface.executeMCR(MCR(15, 0, 7, 5, 0));                          // Invalidate ICache
 	}
+	else
+		TargetInterface.stop(1000);
+}
+
+function EnableSecondCore (TargetShort)
+{
+	var RSTMGR = 0xFFD05000;
+	var RSTMGR_MPUMODRST = RSTMGR;
+	if (TargetShort == "Cyclone V")
+		RSTMGR_MPUMODRST += 0x0010;
+	else if (TargetShort == "Arria 10")
+		RSTMGR_MPUMODRST += 0x0020;
+	
+	AlterRegister (RSTMGR_MPUMODRST, 2, 0);
+}
+
+function DisableWatchdogs_CycloneV ()
+{
+	var MPU    = 0xFFFEC000;
+	var WDOG_TIMER = MPU + 0x620;
+
+	// put L4 watchdog modules into system manager reset: 
+	AlterRegister (RSTMGR + 0x14, 0, 0xc0);			// RSTMGR_PERMODRST
+	// using the system manager bit to reset the ARM watchdog timer resets *both* ARM watchdog timers,
+	// which is often not advisable, so we reset the local ARM watchdog timer manually:
+
+	// first, stop the ARM watchdog timer & disable interrupt: 
+	AlterRegister (WDOG_TIMER + 0x8, 5, 0);	// WDOG_CTRL
+	// reset load and counter register:
+	TargetInterface.pokeUint32 (WDOG_TIMER + 0x0, 0);	// WDOG_LOAD
+	// clear any pending reset and interrupt status
+	TargetInterface.pokeUint32 (WDOG_TIMER + 0x10, 1);	// WDOG_RSTSTAT
+	TargetInterface.pokeUint32 (WDOG_TIMER + 0xC, 1);	// WDOG_INTSTAT
+	// return ARM watchdog timer to (initial) general-purpose timer mode
+	while (TargetInterface.peekUint32 (WDOG_TIMER + 0x8) & 0x00000008) // WDOG_CTRL
+	{
+		TargetInterface.pokeUint32 (WDOG_TIMER + 0x14, 0x12345678); // WDOG_DISABLE - Set Watchdog disable value 0
+		TargetInterface.pokeUint32 (WDOG_TIMER + 0x14, 0x87654321); // WDOG_DISABLE - Set Watchdog disable value 1
+	}
+
+	// now write zeros to the control register significant bitfields
+	AlterRegister (WDOG_TIMER + 0x8, 0x0000ff0f, 0);	// WDOG_CTRL
+}
+
+function DisableWatchdogs_Arria10 ()
+{
+	var MPU    = 0xFFFFC000;
+	var WDOG_TIMER = MPU + 0x620;
+
+	// put L4 watchdog modules into system manager reset: 
+	AlterRegister (RSTMGR + 0x28, 0, 3);		// RSTMGR_PERMODRST
+	// using the system manager bit to reset the ARM watchdog timer resets *both* ARM watchdog timers,
+	// which is often not advisable, so we reset the local ARM watchdog timer manually:
+
+	// first, stop the ARM watchdog timer & disable interrupt: 
+	AlterRegister (WDOG_TIMER + 0x8, 5, 0);	// WDOG_CTRL
+	// reset load and counter register:
+	TargetInterface.pokeUint32 (WDOG_TIMER + 0x0, 0);	// WDOG_LOAD   - 0xffffc620
+	// clear any pending reset and interrupt status
+	TargetInterface.pokeUint32 (WDOG_TIMER + 0x10, 1);	// WDOG_RSTSTAT
+	TargetInterface.pokeUint32 (WDOG_TIMER + 0xC, 1);	// WDOG_INTSTAT
+	// return ARM watchdog timer to (initial) general-purpose timer mode
+	while (TargetInterface.peekUint32 (WDOG_TIMER + 0x8) & 0x00000008) // WDOG_CTRL
+	{
+		TargetInterface.pokeUint32 (WDOG_TIMER + 0x14, 0x12345678); // WDOG_DISABLE - Set Watchdog disable value 0
+		TargetInterface.pokeUint32 (WDOG_TIMER + 0x14, 0x87654321); // WDOG_DISABLE - Set Watchdog disable value 1
+	}
+
+	// now write zeros to the control register significant bitfields
+	AlterRegister (WDOG_TIMER + 0x8, 0x0000ff0f, 0);	// WDOG_CTRL
 }
 
 function LoadBegin ()
@@ -123,10 +193,7 @@ function LoadBegin ()
 	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
 	if (TargetCore == "0")
 	{
-		var RSTMGR = 0xFFD05000;
-		var RSTMGR_MPUMODRST = RSTMGR + 0x0010;
-		AlterRegister (RSTMGR_MPUMODRST, 2, 0); // Enable second core
-
+		EnableSecondCore (TargetShort);
 		InitializeDdrMemory ();
 	}
 }
@@ -149,9 +216,7 @@ function LoadEnd ()
 			TargetInterface.setRegister ("cpsr", cpsr);
 		}
 
-		var RSTMGR = 0xFFD05000;
-		var RSTMGR_MPUMODRST = RSTMGR + 0x0010;
-//		AlterRegister (RSTMGR_MPUMODRST, 2, 0); // Enable second core
+//		EnableSecondCore (TargetShort);
 	}
 	else
 	{
@@ -171,10 +236,13 @@ function InitializeDdrMemory ()
 	}
 
 	TargetInterface.message ("## load initialization App");
-	TargetInterface.pokeBinary (0xFFFF0000, "$(TargetsDir)/IntelSoC/init/bin/Init CycloneV Release/Init.bin");
-	TargetInterface.message ("## start initialization App");
-	var ret = TargetInterface.runFromAddress (0xFFFF0000, 10000);
-	TargetInterface.message ("## initialization done: " + ret);
+	if (TargetShort == "Cyclone V")
+	{
+		TargetInterface.pokeBinary (0xFFFF0000, "$(TargetsDir)/IntelSoC/init/bin/Init CycloneV Release/Init.bin");
+		TargetInterface.message ("## start initialization App");
+		var ret = TargetInterface.runFromAddress (0xFFFF0000, 10000);
+		TargetInterface.message ("## initialization done: " + ret);
+	}
 	TargetInterface.stop ();
 }
 
