@@ -12,6 +12,7 @@ static int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const u
 static int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size);
 static int libmem_Read        (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
 static uint32_t libmem_CRC32  (libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc);
+static int libmem_Flush       (libmem_driver_handle_t *h);
 
 static int EraseSector        (libmem_driver_handle_t *h, libmem_sector_info_t *si);
 static int ProgramPage        (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr);
@@ -37,7 +38,7 @@ static const libmem_driver_functions_t DriverFunctions
 	libmem_EraseSector,
 	nullptr,
 	nullptr,
-	nullptr
+	libmem_Flush
 };
 
 static const libmem_ext_driver_functions_t DriverFunctions_Extended
@@ -70,7 +71,7 @@ int main ([[maybe_unused]]uint32_t flags, uint32_t param)
 	libmem_driver_handle_t flashHandle;
 	// The QSPI-Flash is not memmory-mapped. Use the DDR-Address-Range instead
 	libmem_register_driver (&flashHandle, (uint8_t *)RamStart, 0x2000000, geometry, nullptr, &DriverFunctions, &DriverFunctions_Extended);
-	libmem_driver_paged_write_init (&PageWriteControlBlock, write_buffer, sizeof(write_buffer), ProgramPage, 4, 0);
+	libmem_driver_paged_write_init (&PageWriteControlBlock, write_buffer, sizeof(write_buffer), ProgramPage, 4, LIBMEM_DRIVER_PAGED_WRITE_OPTION_DISABLE_PAGE_PRELOAD);
 
 	#ifdef DEBUG
 		// testcode for libmem driver
@@ -85,7 +86,7 @@ int main ([[maybe_unused]]uint32_t flags, uint32_t param)
 		for (int i=0; i<sizeof(TestMem)/sizeof(TestMem[0]); i++)
 			TestMem[i] = 0xDEADBEEF;
 
-		libmem_write ((uint8_t *)MemPointer, (const uint8_t *)TestMem, 4096);
+		libmem_write ((uint8_t *)MemPointer, (const uint8_t *)TestMem, 4088);
 		libmem_read (reinterpret_cast<uint8_t *>(&TestMem), MemPointer, 4096);
 		libmem_erase ((uint8_t *)MemPointer, 4096, &erase_start, &erase_size);
 		libmem_read (reinterpret_cast<uint8_t *>(&TestMem), MemPointer, 4096);
@@ -208,4 +209,18 @@ static uint32_t libmem_CRC32 ([[maybe_unused]]libmem_driver_handle_t *h, const u
 		crc = libmem_crc32_direct(page_buffer, size, crc);
 	}
 	return crc;
+}
+
+
+/*! libmem_Flush
+\brief The LIBMEM driver's flush function
+\param h A pointer to the handle of the LIBMEM driver.
+\return  The LIBMEM status result.
+The driver's \a flush function should complete any outstanding memory operations (if any) and return the memory to read mode.
+If this operation is not required the function should return \a LIBMEM_STATUS_SUCCESS. */
+static int libmem_Flush (libmem_driver_handle_t *h)
+{
+	DebugPrint ("libmem_Flush\r\n");
+
+	return libmem_driver_paged_write_flush (h, &PageWriteControlBlock);
 }
