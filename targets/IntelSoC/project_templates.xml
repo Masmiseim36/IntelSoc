@@ -43,6 +43,16 @@
 			<file name="$(TargetsDir)/IntelSoC/IntelSoC_Startup.s" expand="no" />
 			<file name="$(TargetsDir)/IntelSoC/IntelSoC_Target.js" expand="no" />
 			<file name="$(TargetsDir)/IntelSoC/sram_placement.xml" expand="no" />
+			<file name="$(TargetsDir)/IntelSoC/system_$(DeviceName).h" expand="no" />
+			<file name="$(TargetsDir)/IntelSoC/system_$(DeviceName).c" expand="no" />
+			<file name="$(TargetsDir)/IntelSoC/$(DeviceName).h" expand="no" />
+		</folder>
+		<folder Name="cmsis">
+			<file name="$(TargetsDir)/../CMSIS_5/CMSIS/Core_A/Include/cmsis_compiler.h" expand="no" />
+			<file name="$(TargetsDir)/../CMSIS_5/CMSIS/Core_A/Include/cmsis_gcc.h" expand="no" />
+			<file name="$(TargetsDir)/../CMSIS_5/CMSIS/Core_A/Include/core_ca.h" expand="no" />
+			<file name="$(TargetsDir)/../CMSIS_5/CMSIS/Core_A/Include/irq_ctrl.h" expand="no" />
+			<file name="$(TargetsDir)/../CMSIS_5/CMSIS/Core_A/Source/irq_ctrl_gic.c" expand="no" />
 		</folder>
 		<folder name="alt lib">
 			<file name="$(TargetsDir)/IntelSoC/include/alt_16550_uart.c" expand="no" />

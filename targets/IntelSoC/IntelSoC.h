@@ -19,11 +19,18 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE. */
 
-#ifndef __SETUP_H__
-#define __SETUP_H__
 
+#ifndef INTEL_SOC_H__
+#define INTEL_SOC_H__
 
-void SetupController (void);
+#if defined CYCLONE_V_0 || defined CYCLONE_V_1
+	#include "CycloneV.h"
+	#include "system_CycloneV.h"
+#elif defined ARRIA10_0 || defined ARRIA10_1
+	#include "Arria10.h"
+	#include "system_Arria10.h"
+#else
+	#error "Unknown controller"
+#endif
 
-
-#endif // __SETUP_H__
+#endif // INTEL_SOC_H__

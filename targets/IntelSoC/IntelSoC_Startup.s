@@ -19,6 +19,13 @@
  *                           Preprocessor Definitions
  *                           ------------------------
  *
+ *
+ * __NO_SYSTEM_INIT
+ *
+ *   If defined, the SystemInit() function will NOT be called. By default SystemInit()
+ *   is called after reset to enable the clocks and memories to be initialised
+ *   prior to any C startup initialisation.
+ *
  * NO_CACHE_ENABLE
  * 
  *   When specified the MMU is not enabled.
@@ -38,7 +45,6 @@
   .code 32
   .align 0
   .global _vectors
-  .global reset_handler
   
 /*****************************************************************************
  *                                                                           *
@@ -65,34 +71,44 @@ pabort_handler_address:
   .word pabort_handler
 dabort_handler_address:
   .word dabort_handler
-dummy:
-  .word 0   
+reserved_handler_address:
+   .word ReservedHandler
 irq_handler_address:
   .word irq_handler
 fiq_handler_address:
   .word fiq_handler
 
 #ifndef NO_CACHE_ENABLE
-#if __CROSSWORKS_MAJOR_VERSION==2
-  .section .fast, "ax"
-#else
   .section .mmu, "ax"
-#endif
   .balign 0x4000, 0xff
 mmu_page_table:
   .space 0x4000
 #endif
-
-  .section .init, "ax"
-  .code 32
-  .align 0
 
 /******************************************************************************
  *                                                                            *
  * Default exception handlers                                                 *
  *                                                                            *
  ******************************************************************************/
+ReservedHandler:
+   b  ReservedHandler
+
+
+/******************************************************************************
+ *                                                                            *
+ * Reset Handler                                                              *
+ *                                                                            *
+ ******************************************************************************/
+  .section .init, "ax"
+  .code 32
+  .align 4
+  .global reset_handler
 reset_handler:
+#ifndef __NO_SYSTEM_INIT
+  /* Set the stack pointer for temporary use. The stack will be set later to the correct value. */
+  ldr   sp, =__stack_end__
+  bl SystemInit
+#endif
 
   /* Set the vector base address */
   ldr r0, =_vectors
@@ -137,12 +153,12 @@ reset_handler:
 
 #if !defined(__SOFTFP__)
   // enable cp11 and cp10
-  mrc p15, #0x00, r0, c1, c0, #0x02
-  orr r0, r0, #0x00F00000
-  mcr p15, #0x00, r0, c1, c0, #0x02
+  mrc p15, #0x00, r0, c1, c0, #0x02  /* Read CP Access register */
+  orr r0, r0, #0x00F00000            /* Enable full access to NEON/VFP (Coprocessors 10 and 11) */
+  mcr p15, #0x00, r0, c1, c0, #0x02  /* Write CP Access register */
   // enable VFP
-  mov r0, #0x40000000
-  fmxr fpexc, r0
+  mov r0, #0x40000000                /* Switch on the VFP and NEON hardware */
+  fmxr fpexc, r0                     /* Set EN bit in FPEXC */
 #ifndef __NO_RUNFAST_MODE
   nop
   nop
@@ -178,15 +194,15 @@ dabort_handler:
   .global irq_handler
   .type irq_handler, function
 irq_handler:
-  stmfd sp!, {r0}
-  mrs r0, spsr
+  stmfd sp!, {r0}                // Save R0 on the Stack
+  mrs r0, spsr                   // Get the Saved Program Status Registers
   tst r0, #0x80
-  ldmfd sp!, {r0}
+  ldmfd sp!, {r0}                // Restore the saved R0 register from the stack
   subnes pc, lr, #4
-  stmfd sp!, {r0-r4, r12, lr}
-  bl alt_int_handler_irq
-  ldmfd sp!, {r0-r4, r12, lr}
-  subs pc, lr, #4
+  stmfd sp!, {r0-r4, r12, lr}    // Push working registers.
+  bl IRQ_Handler
+  ldmfd sp!, {r0-r4, r12, lr}    // Pop working registers.
+  subs pc, lr, #4                // LR offset to return from this exception: -4
 fiq_handler:
   b .  /* Endless loop */
 

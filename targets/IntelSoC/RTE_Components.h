@@ -19,11 +19,18 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE. */
 
-#ifndef __SETUP_H__
-#define __SETUP_H__
+#ifndef RTE_COMPONENTS_H_
+#define RTE_COMPONENTS_H_
 
 
-void SetupController (void);
+// Define the Device Header File: 
+#if defined CYCLONE_V_0 || defined CYCLONE_V_1
+	#define CMSIS_device_header "CycloneV.h"
+#elif defined ARRIA10_0 || defined ARRIA10_1
+	#define CMSIS_device_header "Arria10.h"
+#else
+	#error "Unknown controller"
+#endif
 
 
-#endif // __SETUP_H__
+#endif /* RTE_COMPONENTS_H_ */

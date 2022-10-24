@@ -2,7 +2,7 @@
 <propertyGroups>
 	<group short="Target Processor" group="Build Options" long="Select a set of target options" name="Target" default="UNKNOWN" >
 		<groupEntry name="Cyclone V_0" family="IntelSoC">
-			<property name="macros" value="DeviceShort=soc_cv_av" />
+			<property name="macros" value="DeviceShort=soc_cv_av;DeviceName=CycloneV" />
 			<property value="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml" name="linker_memory_map_file" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml" />
 			<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/IntelSoC/init/bin/Loader CycloneV Release/Loader.elf" configuration="Flash" />
@@ -11,7 +11,7 @@
 			<cdefine name="soc_cv_av" value="1" />
 		</groupEntry>
 		<groupEntry name="Cyclone V_1" family="IntelSoC">
-			<property name="macros" value="DeviceShort=soc_cv_av" />
+			<property name="macros" value="DeviceShort=soc_cv_av;DeviceName=CycloneV" />
 			<property value="$(TargetsDir)/IntelSoC/CycloneV_MemoryMap.xml" name="linker_memory_map_file" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/CycloneV_Peripherals.xml" />
 			<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/IntelSoC/init/bin/Loader CycloneV Release/Loader.elf" configuration="Flash" />
@@ -20,7 +20,7 @@
 			<cdefine name="soc_cv_av" value="1" />
 		</groupEntry>
 		<groupEntry name="Arria 10_0" family="IntelSoC">
-			<property name="macros" value="DeviceShort=soc_a10" />
+			<property name="macros" value="DeviceShort=soc_a10;DeviceName=Arria10" />
 			<property value="$(TargetsDir)/IntelSoC/Arria10_MemoryMap.xml" name="linker_memory_map_file" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/Arria10_Peripherals.xml" />
 			<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/IntelSoC/init/bin/Loader Arria10 Release/Loader.elf" configuration="Flash" />
@@ -29,7 +29,7 @@
 			<cdefine name="soc_a10" value="1" />
 		</groupEntry>
 		<groupEntry name="Arria 10_1" family="IntelSoC">
-			<property name="macros" value="DeviceShort=soc_a10" />
+			<property name="macros" value="DeviceShort=soc_a10;DeviceName=Arria10" />
 			<property value="$(TargetsDir)/IntelSoC/Arria10_MemoryMap.xml" name="linker_memory_map_file" />
 			<property name="debug_register_definition_file" value="$(TargetsDir)/IntelSoC/Arria10_Peripherals.xml" />
 			<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/IntelSoC/init/bin/Loader Arria10 Release/Loader.elf" configuration="Flash" />

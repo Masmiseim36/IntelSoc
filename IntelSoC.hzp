@@ -24,6 +24,12 @@
       <file file_name="targets/IntelSoC/Arria10_MemoryMap.xml" />
       <file file_name="targets/IntelSoC/Arria10_Peripherals.xml" />
       <file file_name="targets/IntelSoC/Stratix10_Peripherals.xml" />
+      <file file_name="targets/IntelSoC/IntelSoC.h" />
+      <file file_name="targets/IntelSoC/system_Arria10.c" />
+      <file file_name="targets/IntelSoC/system_Arria10.h" />
+      <file file_name="targets/IntelSoC/system_CycloneV.c" />
+      <file file_name="targets/IntelSoC/system_CycloneV.h" />
+      <file file_name="targets/IntelSoC/RTE_Components.h" />
       <folder Name="include">
         <file file_name="targets/IntelSoC/include/alt_16550_uart.c" />
         <file file_name="targets/IntelSoC/include/alt_16550_uart.h" />
