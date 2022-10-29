@@ -542,7 +542,7 @@ IRQHandler_t IRQ_GetHandler (IRQn_ID_t irqn)
 __WEAK void IRQ_Handler (void)
 {
 	IRQn_Type irqn = GIC_AcknowledgePending ();
-	if (irqn < IRQ_GIC_LINE_COUNT)
+	if (irqn < ((IRQn_Type))IRQ_GIC_LINE_COUNT)
 		IrqTable[irqn]();
 	GIC_EndInterrupt (irqn);
 }

@@ -39,7 +39,7 @@ OF SUCH DAMAGE. */
 // and "Cyclone V Hard Processor System Technical Reference Manual" Table 1-3: "Peripheral Region Address Map"
 #define GIC_DISTRIBUTOR_BASE (0xFFFEC000 + 0x1000) /* Interrupt Controller Distributor */
 #define GIC_INTERFACE_BASE   (0xFFFEC000 + 0x100)  /* Interrupt controller CPU Interface */
-#define IRQ_GIC_LINE_COUNT 256
+#define IRQ_GIC_LINE_COUNT   256
 // (0xFFFEC000 + 0x000) /* Snoop Control Unit (SCU) */
 // (0xFFFEC000 + 0x200) /* Global Timer */
 #define TIMER_BASE (0xFFFEC000 + 0x600) /* Local Timer/Watchdog */

@@ -40,7 +40,7 @@ OF SUCH DAMAGE. */
 // and "Arria 10 Hard Processor System Technical Reference Manual" Table 9."Peripheral Region Address Map"
 #define GIC_DISTRIBUTOR_BASE (0xFFFFF000 + 0x1000) /* Interrupt Controller Distributor */
 #define GIC_INTERFACE_BASE   (0xFFFFF000 + 0x100)  /* Interrupt controller CPU Interface */
-#define IRQ_GIC_LINE_COUNT 256
+#define IRQ_GIC_LINE_COUNT   256
 // (0xFFFFF000 + 0x000) /* Snoop Control Unit (SCU) */
 // (0xFFFFF000 + 0x200) /* Global Timer */
 // (0xFFFFF000 + 0x600) /* Local Timer/Watchdog */
