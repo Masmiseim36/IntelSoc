@@ -38,24 +38,41 @@ OF SUCH DAMAGE. */
 #define L2C_310_BASE ALT_L2_REGS_L2TYPE_ADDR /* 0xFFFFF000 */
 // Compare Programmer's Guide for Armv7-A - Chapter "18.10 Private memory region"
 // and "Arria 10 Hard Processor System Technical Reference Manual" Table 9."Peripheral Region Address Map"
-#define GIC_DISTRIBUTOR_BASE (0xFFFFF000 + 0x1000) /* Interrupt Controller Distributor */
-#define GIC_INTERFACE_BASE   (0xFFFFF000 + 0x100)  /* Interrupt controller CPU Interface */
+#define GIC_DISTRIBUTOR_BASE (0xFFFFC000 + 0x1000) /* Interrupt Controller Distributor */
+#define GIC_INTERFACE_BASE   (0xFFFFC000 + 0x100)  /* Interrupt controller CPU Interface */
 #define IRQ_GIC_LINE_COUNT   256
 // (0xFFFFF000 + 0x000) /* Snoop Control Unit (SCU) */
 // (0xFFFFF000 + 0x200) /* Global Timer */
 // (0xFFFFF000 + 0x600) /* Local Timer/Watchdog */
-#define TIMER_BASE (0xFFFFF000 + 0x600) /* Local Timer/Watchdog */
+#define TIMER_BASE (0xFFFFC000 + 0x600) /* Local Timer/Watchdog */
 
 
 // Compare "Arria 10 Hard Processor System Technical Reference Manual" Table 88 "GIC Interrupt Map"
 typedef enum IRQn
 {
+	// Software Generated Interrupt (SGI)
+	SGI0_IRQn             =  0,
+	SGI1_IRQn             =  1,
+	SGI2_IRQn             =  2,
+	SGI3_IRQn             =  3,
+	SGI4_IRQn             =  4,
+	SGI5_IRQn             =  5,
+	SGI6_IRQn             =  6,
+	SGI7_IRQn             =  7,
+	SGI8_IRQn             =  8,
+	SGI9_IRQn             =  9,
+	SGI10_IRQn            =  10,
+	SG111_IRQn            =  11,
+	SGI12_IRQn            =  12,
+	SGI13_IRQn            =  13,
+	SGI14_IRQn            =  14,
+	SGI15_IRQn            =  15,
 	// ARM generic Interrupts
-	GlobalTimer_IRQn                  =  27, // Source Block: 
-	Legacy_nFIQ_IRQn                  =  28, // Source Block: 
-	CoreTimer_IRQn                    =  29, // Source Block: 
-	CoreWatchdog_IRQn                 =  30, // Source Block: 
-	Legacy_nIRQ_IRQn                  =  31, // Source Block: 
+	GlobalTimer_IRQn      =  27, // Source Block: 
+	Legacy_nFIQ_IRQn      =  28, // Source Block: 
+	CoreTimer_IRQn        =  29, // Source Block: 
+	CoreWatchdog_IRQn     =  30, // Source Block: 
+	Legacy_nIRQ_IRQn      =  31, // Source Block: 
 	// COntroller Specific Interrupts
 	DERR_Global_IRQn      =  32, // Source Block: System Manager
 	cpux_parityfail_IRQn  =  33, // Source Block: System Manager
@@ -189,6 +206,8 @@ typedef enum IRQn
 	nCTIIRQ1_IRQn         = 157, // Source Block: 
 	SEC_MGR_INTR_IRQn     = 158, // Source Block: 
 	DATABWERR_IRQn        = 159, // Source Block: 
+
+	Last_IRQn             = IRQ_GIC_LINE_COUNT
 } IRQn_Type;
 
 #include "core_ca.h"               /* Cortex-A processor and core peripherals       */

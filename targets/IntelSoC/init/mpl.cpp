@@ -9,7 +9,7 @@ int main (void)
 	// Setup Lightweigth HPS-to-FPGA and HPS-to-FPGA bridge 
 	SetupController ();
    
-   // Signal end of prelaoder   
+   // Signal end of preloader   
    __asm("bkpt 0x70");
    
    return 0;

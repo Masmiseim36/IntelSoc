@@ -200,7 +200,13 @@ irq_handler:
   ldmfd sp!, {r0}                // Restore the saved R0 register from the stack
   subnes pc, lr, #4
   stmfd sp!, {r0-r4, r12, lr}    // Push working registers.
+#if !defined(__SOFTFP__)
+  vpush {d0-d7}                  // Push floating point registers
+#endif
   bl IRQ_Handler
+#if !defined(__SOFTFP__)
+  vpop {d0-d7}                   // Pop floating point registers
+#endif
   ldmfd sp!, {r0-r4, r12, lr}    // Pop working registers.
   subs pc, lr, #4                // LR offset to return from this exception: -4
 fiq_handler:

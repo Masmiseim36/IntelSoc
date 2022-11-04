@@ -47,6 +47,23 @@ OF SUCH DAMAGE. */
 // Compare "Cyclone V Hard Processor System Technical Reference Manual" Table 9-3: "GIC Interrupt Map"
 typedef enum IRQn
 {
+	// Software Generated Interrupt (SGI)
+	SGI0_IRQn                         =  0,
+	SGI1_IRQn                         =  1,
+	SGI2_IRQn                         =  2,
+	SGI3_IRQn                         =  3,
+	SGI4_IRQn                         =  4,
+	SGI5_IRQn                         =  5,
+	SGI6_IRQn                         =  6,
+	SGI7_IRQn                         =  7,
+	SGI8_IRQn                         =  8,
+	SGI9_IRQn                         =  9,
+	SGI10_IRQn                        =  10,
+	SG111_IRQn                        =  11,
+	SGI12_IRQn                        =  12,
+	SGI13_IRQn                        =  13,
+	SGI14_IRQn                        =  14,
+	SGI15_IRQn                        =  15,
 	// ARM generic Interrupts
 	GlobalTimer_IRQn                  =  27, // Source Block: 
 	Legacy_nFIQ_IRQn                  =  28, // Source Block: 
@@ -256,6 +273,8 @@ typedef enum IRQn
 
 	ram_ecc_corrected_IRQn            = 210, // Source Blocks: On-chip RAM
 	ram_ecc_uncorrected_IRQn          = 211, // Source Blocks: On-chip RAM
+
+	Last_IRQn                         = IRQ_GIC_LINE_COUNT
 } IRQn_Type;
 
 

@@ -20,8 +20,8 @@ IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE. */
 
 #include <stdbool.h>
-#include "CycloneV.h"
-#include "system_CycloneV.h"
+#include "Arria10.h"
+#include "system_Arria10.h"
 #include "irq_ctrl.h"
 
 void SystemInit (void)
@@ -49,6 +49,23 @@ __attribute__ ((weak)) void InteruptReservedHandler (void)
 	while (true)
 		;
 }
+
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI0_IRQHandler            (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI1_IRQHandler            (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI2_IRQHandler            (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI3_IRQHandler            (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI4_IRQHandler            (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI5_IRQHandler            (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI6_IRQHandler            (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI7_IRQHandler            (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI8_IRQHandler            (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI9_IRQHandler            (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI10_IRQHandler           (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SG111_IRQHandler           (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI12_IRQHandler           (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI13_IRQHandler           (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI14_IRQHandler           (void);
+__attribute__ ((weak, alias("InteruptDefaultHandler"))) void SGI15_IRQHandler           (void);
 
 
 __attribute__ ((weak, alias("InteruptDefaultHandler"))) void GlobalTimer_IRQHandler     (void);
@@ -194,22 +211,22 @@ __attribute__ ((weak, alias("InteruptDefaultHandler"))) void DATABWERR_IRQHandle
 
 static IRQHandler_t IrqTable [IRQ_GIC_LINE_COUNT] =
 {
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
-	InteruptReservedHandler,
+	SGI0_IRQHandler,
+	SGI1_IRQHandler,
+	SGI2_IRQHandler,
+	SGI3_IRQHandler,
+	SGI4_IRQHandler,
+	SGI5_IRQHandler,
+	SGI6_IRQHandler,
+	SGI7_IRQHandler,
+	SGI8_IRQHandler,
+	SGI9_IRQHandler,
+	SGI10_IRQHandler,
+	SG111_IRQHandler,
+	SGI12_IRQHandler,
+	SGI13_IRQHandler,
+	SGI14_IRQHandler,
+	SGI15_IRQHandler,
 	InteruptReservedHandler,
 	InteruptReservedHandler,
 	InteruptReservedHandler,
@@ -399,7 +416,7 @@ IRQHandler_t IRQ_GetHandler (IRQn_ID_t irqn)
 __WEAK void IRQ_Handler (void)
 {
 	IRQn_Type irqn = GIC_AcknowledgePending ();
-	if (irqn < ((IRQn_Type))IRQ_GIC_LINE_COUNT)
+	if (irqn < Last_IRQn)
 		IrqTable[irqn]();
 	GIC_EndInterrupt (irqn);
 }
