@@ -29,7 +29,7 @@ void SystemInit (void)
 	SystemInitHook ();
 }
 
-void SystemInitHook (void)
+__attribute__ ((weak)) void SystemInitHook (void)
 {
 	// Void implementation of the weak function.
 }
@@ -209,7 +209,7 @@ __attribute__ ((weak, alias("InteruptDefaultHandler"))) void SEC_MGR_INTR_IRQHan
 __attribute__ ((weak, alias("InteruptDefaultHandler"))) void DATABWERR_IRQHandler       (void);
 
 
-static IRQHandler_t IrqTable [IRQ_GIC_LINE_COUNT] =
+IRQHandler_t IrqTable [IRQ_GIC_LINE_COUNT] =
 {
 	SGI0_IRQHandler,
 	SGI1_IRQHandler,
@@ -416,7 +416,6 @@ IRQHandler_t IRQ_GetHandler (IRQn_ID_t irqn)
 __WEAK void IRQ_Handler (void)
 {
 	IRQn_Type irqn = GIC_AcknowledgePending ();
-	if (irqn < Last_IRQn)
-		IrqTable[irqn]();
+	IRQ_GetHandler(irqn)();
 	GIC_EndInterrupt (irqn);
 }

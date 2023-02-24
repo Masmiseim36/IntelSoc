@@ -27,11 +27,11 @@ function Connect ()
 		// TargetInterface.selectDevice(irPre, irPost, drPre, drPost) sets the instruction and data register
 		// (number of devices) pre and post bits.
 
-		// “Devices before” refers to the number of JTAG devices that the TDI signal has to pass through in the
-		// daisy-chain before reaching the target device. Similarly, “devices after” is the number of devices that
+		// "Devices before" refers to the number of JTAG devices that the TDI signal has to pass through in the
+		// daisy-chain before reaching the target device. Similarly, "devices after" is the number of devices that
 		// the signal has to pass through after the target device before reaching the JTAG-TDO pin.
 
-		// Instruction bits “before” and “after” refers to the total sum of all JTAG devices’ instruction register
+		// Instruction bits "before" and "after" refers to the total sum of all JTAG devices instruction register
 		// lengths, which are connected before and after the target device in the daisy-chain.
 		TargetInterface.selectDevice (0, 10, 0, 1);
 	}
