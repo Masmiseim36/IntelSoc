@@ -17,6 +17,7 @@ function Connect ()
 	var TargetShort    = TargetFullName.substring (0, TargetFullName.length-2);
 	var TargetCore     = TargetFullName.substring (TargetFullName.length-1);
 
+	TargetInterface.message ("## Connect");
 	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
 
 	TargetInterface.setDeviceTypeProperty (TargetShort);
@@ -50,18 +51,20 @@ function Connect ()
 	if (TargetCore == "0")
 	{
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80110000); // CPU0 Debug
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80111000); // CPU0_PMU
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80111000); // CPU0_PMU --> Performance Monitoring Unit
 	}
 	else
 	{
 		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80112000); // CPU1 Debug
-		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80113000); // CPU1_PMU
+		TargetInterface.setDebugInterfaceProperty ("component_base",  0x80113000); // CPU1_PMU --> Performance Monitoring Unit
 		
 	}
 	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80118000); // CTI0 --> Cross-Trigger Interface 0
 	TargetInterface.setDebugInterfaceProperty ("component_base",  0x80119000); // CTI1 --> Cross-Trigger Interface 1
 	TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011C000); // PTM0 --> Program Trace Macrocell 0
 	TargetInterface.setDebugInterfaceProperty ("component_base",  0x8011D000); // PTM1 --> Program Trace Macrocell 1
+
+	TargetInterface.message ("## Connect - done");
 }
 
 // This function is used to return the controller type as a string
@@ -106,23 +109,41 @@ function Reset ()
 
 	if (TargetCore == "0")
 	{
+		TargetInterface.setNSRST(0);
 		TargetInterface.resetAndStop (100);
+		TargetInterface.setNSRST(1); 
 		var i = TargetInterface.executeMRC(MRC(15, 0, 1, 0, 0));                  // Read control register
 		TargetInterface.executeMCR(MCR(15, 0, 1, 0, 0), i & ~(1<<0|1<<2|1<<12));  // Write control register
 		TargetInterface.executeMCR(MCR(15, 0, 7, 5, 0));                          // Invalidate ICache
+
+		EnableSecondCore (TargetShort);
 	}
 	else
-		TargetInterface.stop(1000);
+	{
+//		TargetInterface.stop(1000);
+	}
+
+	TargetInterface.message ("## Reset - done");
 }
 
 function EnableSecondCore (TargetShort)
 {
+	TargetInterface.message ("## Enable second core on " + TargetShort);
 	var RSTMGR = 0xFFD05000;
 	var RSTMGR_MPUMODRST = RSTMGR;
 	if (TargetShort == "Cyclone V")
 		RSTMGR_MPUMODRST += 0x0010;
 	else if (TargetShort == "Arria 10")
+	{
+		// Set an endless loop to the start address of the second core
+		TargetInterface.pokeUint32 (0, 0xE320F000); // -->    nop
+		TargetInterface.pokeUint32 (4, 0xE320F003); // -->    wfi
+		TargetInterface.pokeUint32 (8, 0xEAFBFF52); // -->    b 0x00000000
+		TargetInterface.pokeUint32 (0xFFE00000, 0xE320F000); // -->    nop
+		TargetInterface.pokeUint32 (0xFFE00004, 0xE320F003); // -->    wfi
+		TargetInterface.pokeUint32 (0xFFE00008, 0xEAFBFF52); // -->    b 0x00000000
 		RSTMGR_MPUMODRST += 0x0020;
+	}
 	
 	AlterRegister (RSTMGR_MPUMODRST, 2, 0);
 }
@@ -193,9 +214,10 @@ function LoadBegin ()
 	TargetInterface.message ("## TargetFullName: " + TargetFullName + " - TargetShort: " + TargetShort + " - TargetCore: " + TargetCore);
 	if (TargetCore == "0")
 	{
-		EnableSecondCore (TargetShort);
 		InitializeDdrMemory ();
+		EnableSecondCore (TargetShort);
 	}
+	TargetInterface.message ("## call LoadBegin - done");
 }
 
 function LoadEnd ()
@@ -222,6 +244,8 @@ function LoadEnd ()
 	{
 		TargetInterface.stop ();
 	}
+
+	TargetInterface.message ("## call LoadEnd - done");
 }
 
 function InitializeDdrMemory ()
@@ -229,7 +253,7 @@ function InitializeDdrMemory ()
 	var TargetFullName = TargetInterface.getProjectProperty ("Target");
 	var TargetShort    = TargetFullName.substring (0, TargetFullName.length-2);
 	var TargetCore     = TargetFullName.substring (TargetFullName.length-1);
-	
+	var ret;
 	if (TargetInterface.implementation() == "crossworks_simulator")
 	{
 		return;
@@ -240,9 +264,15 @@ function InitializeDdrMemory ()
 	{
 		TargetInterface.pokeBinary (0xFFFF0000, "$(TargetsDir)/IntelSoC/init/bin/Init CycloneV Release/Init.bin");
 		TargetInterface.message ("## start initialization App");
-		var ret = TargetInterface.runFromAddress (0xFFFF0000, 10000);
-		TargetInterface.message ("## initialization done: " + ret);
+		ret = TargetInterface.runFromAddress (0xFFFF0000, 10000);
 	}
+	else if( TargetShort == "Arria 10")
+	{
+//		TargetInterface.pokeBinary (0xFFE00000, "Add the Arria-Loader here");
+		TargetInterface.message ("## start initialization App");
+		ret = TargetInterface.runFromAddress (0xFFE00000, 10000);
+	}
+	TargetInterface.message ("## initialization done: " + ret);
 	TargetInterface.stop ();
 }
 
