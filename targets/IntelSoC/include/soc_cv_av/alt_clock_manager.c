@@ -2018,7 +2018,7 @@ ALT_STATUS_CODE alt_clk_pll_cfg_set(ALT_CLK_t pll, const ALT_CLK_PLL_CFG_t * pll
             return ret;
         }
 
-        alt_write_word(ALT_CLKMGR_SDRPLL_VCO_ADDR, temp);
+        ret = alt_write_word(ALT_CLKMGR_SDRPLL_VCO_ADDR, temp);
 
         /* write the SDRAM PLL C0 Divide Counter ----------------------------- */
         temp =  ALT_CLKMGR_SDRPLL_DDRDQSCLK_CNT_SET(pll_cfg->cntrs[0])
@@ -2429,6 +2429,10 @@ ALT_STATUS_CODE alt_clk_pll_vco_cfg_set(ALT_CLK_t pll, uint32_t mult, uint32_t d
             {
                 ret = alt_clk_pll_lock_wait(ALT_CLK_MAIN_PLL, 1000);
                       /* verify PLL is still locked or wait for it to lock again */
+        if (ret != ALT_E_SUCCESS)
+        {
+            return ret;
+        }
             }
             alt_replbits_word(vaddr, denommask, div << denomshift);
         }
@@ -2445,12 +2449,15 @@ ALT_STATUS_CODE alt_clk_pll_vco_cfg_set(ALT_CLK_t pll, uint32_t mult, uint32_t d
             {
                 ret = alt_clk_pll_lock_wait(ALT_CLK_MAIN_PLL, 1000);
                       /* verify PLL is still locked or wait for it to lock again */
+        if (ret != ALT_E_SUCCESS) {return ret;} 
             }
             alt_replbits_word(vaddr, denommask, div << denomshift);
         }
 
         ret = alt_clk_pll_lock_wait(ALT_CLK_MAIN_PLL, 1000);
               /* verify PLL is still locked or wait for it to lock again */
+        if (ret != ALT_E_SUCCESS) {return ret;} 
+
         if (byp)
         {
             alt_clk_pll_bypass_disable(pll);
