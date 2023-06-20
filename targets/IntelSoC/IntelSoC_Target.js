@@ -283,3 +283,24 @@ function AlterRegister (Addr, Clear, Set)
 	temp |= Set;
 	TargetInterface.pokeUint32 (Addr, temp);
 }
+
+
+function EnableTrace (traceInterfaceType)
+{
+	if (traceInterfaceType == "ETB")
+	{
+		TargetInterface.message ("## EnableTrace with 'ETB' on " + TargetInterface.getProjectProperty ("Target"));
+		if (TargetInterface.implementation() != "j-link")
+		{
+			TargetInterface.setDebugInterfaceProperty ("CORESIGHT_SetCSTFBaseAddr", 0x80004000, "ForceUnlock", 1, "APIndex", 1);
+			TargetInterface.setDebugInterfaceProperty ("CORESIGHT_SetTPIUBaseAddr", 0x80003000, "ForceUnlock", 1, "APIndex", 1);
+			TargetInterface.setDebugInterfaceProperty ("CORESIGHT_SetTMCBaseAddr",  0x80001000, "ForceUnlock", 1, "APIndex", 1);
+			TargetInterface.setDebugInterfaceProperty ("CORESIGHT_SetPTMBaseAddr",  0x8011C000, "ForceUnlock", 1, "APIndex", 1);
+			TargetInterface.setDebugInterfaceProperty ("SetETBIsPresent", 1);
+		}
+	}
+	else
+	{
+		TargetInterface.message ("## Unknown or unsupported Trace type '" + traceInterfaceType + "'");
+	}
+}
