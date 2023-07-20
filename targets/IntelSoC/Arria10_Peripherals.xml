@@ -25455,6 +25455,173 @@
   </RegisterGroup>
   <RegisterGroup name="i_ram" start="0xFFE00000" />
   <RegisterGroup name="i_rom" start="0xFFFC0000" />
-  <RegisterGroup name="mpu_regs" start="0xFFFFC000" />
-  <RegisterGroup name="l2_regs" start="0xFFFFF000" />
+  <RegisterGroup name="MPCore_SCU" start="0xFFFFC000">
+    <!-- https://developer.arm.com/documentation/ddi0407/e/snoop-control-unit/scu-registers -->
+    <Register name="Control Register" start="+0x0000" size="4">
+      <BitField name="SCU enable" start="0" size="1" />
+      <BitField name="Address filtering enable" start="1" size="1" />
+      <BitField name="Parity ON" start="2" size="1" />
+      <BitField name="Speculative linefills enable" start="3" size="1" />
+      <BitField name="Force all Device to port0 enable" start="4" size="1" />
+      <BitField name="standby enable" start="5" size="1" />
+      <BitField name="IC standby enable" start="6" size="1" />
+    </Register>
+    <Register name="Configuration Register" start="+0x0004" size="4">
+      <BitField name="CPU number" start="0" size="2">
+        <Enum name="One Cortex-A9 processor, CPU0" start="0" />
+        <Enum name="Two Cortex-A9 processors" start="1" />
+        <Enum name="Three Cortex-A9 processors" start="2" />
+        <Enum name="Four Cortex-A9 processors" start="3" />
+      </BitField>
+      <BitField name="CPUs SMP" start="4" size="4">
+        <Enum name="AMP" description="This Cortex-A9 processor is in AMP mode not taking part in coherency or not present" start="0" />
+        <Enum name="SMP" description="This Cortex-A9 processor is in SMP mode taking part in coherency" start="1" />
+      </BitField>
+      <BitField name="Tag RAM sizes" start="8" size="8">
+        <Enum name="16KB cache, 64 indexes per tag RAM" start="0" />
+        <Enum name="32KB cache, 128 indexes per tag RAM" start="0" />
+        <Enum name="64KB cache, 256 indexes per tag RAM" start="0" />
+      </BitField>
+    </Register>
+    <Register name="CPU Power Status Register" start="+0x0008" size="4">
+      <BitField name="CPU0 status" description="Power status of the Cortex-A9 processor." start="0" size="2">
+        <Enum name="Normal Mode" start="0" />
+        <Enum name="dormant mode" description="the Cortex-A9 processor is about to enter (or is in) dormant mode. No coherency request is sent to the Cortex-A9 processor" start="2" />
+        <Enum name="powered-off mode" description="the Cortex-A9 processor is about to enter (or is in) powered-off mode, or is nonpresent. No coherency request is sent to the Cortex-A9 processor." start="2" />
+      </BitField>
+      <BitField name="CPU1 status" description="Power status of the Cortex-A9 processor." start="8" size="2">
+        <Enum name="Normal Mode" start="0" />
+        <Enum name="dormant mode" description="the Cortex-A9 processor is about to enter (or is in) dormant mode. No coherency request is sent to the Cortex-A9 processor" start="2" />
+        <Enum name="powered-off mode" description="the Cortex-A9 processor is about to enter (or is in) powered-off mode, or is nonpresent. No coherency request is sent to the Cortex-A9 processor." start="2" />
+      </BitField>
+      <BitField name="CPU2 status" description="Power status of the Cortex-A9 processor." start="16" size="2">
+        <Enum name="Normal Mode" start="0" />
+        <Enum name="dormant mode" description="the Cortex-A9 processor is about to enter (or is in) dormant mode. No coherency request is sent to the Cortex-A9 processor" start="2" />
+        <Enum name="powered-off mode" description="the Cortex-A9 processor is about to enter (or is in) powered-off mode, or is nonpresent. No coherency request is sent to the Cortex-A9 processor." start="2" />
+      </BitField>
+      <BitField name="CPU3 status" description="Power status of the Cortex-A9 processor." start="24" size="2">
+        <Enum name="Normal Mode" start="0" />
+        <Enum name="dormant mode" description="the Cortex-A9 processor is about to enter (or is in) dormant mode. No coherency request is sent to the Cortex-A9 processor" start="2" />
+        <Enum name="powered-off mode" description="the Cortex-A9 processor is about to enter (or is in) powered-off mode, or is nonpresent. No coherency request is sent to the Cortex-A9 processor." start="2" />
+      </BitField>
+    </Register>
+    <Register name="Invalidate All Registers in Secure State" start="+0x000C" size="4">
+    </Register>
+    <Register name="Filtering Start Address Register" start="+0x0040" size="4">
+    </Register>
+    <Register name="Filtering End Address Register" start="+0x0044" size="4">
+    </Register>
+    <Register name="Access Control (SAC) Register" start="+0x0050" size="4">
+    </Register>
+    <Register name="Non-secure Access Control (SNSAC) Register" start="+0x0054" size="4">
+    </Register>
+  </RegisterGroup>
+  <RegisterGroup name="l2_310" start="0xFFFFF000">
+    <!-- https://developer.arm.com/documentation/ddi0246/f/Programmers-Model/Register-summary -->
+    <Register name="reg0_cache_id" start="+0x0000" size="4">
+    </Register>
+    <Register name="reg0_cache_type" start="+0x0004" size="4">
+      <BitField name="L2 cache line length" start="0" size="2" />
+      <BitField name="L2 associativity" start="6" size="1" />
+      <BitField name="L2 cache way size (Isize)" start="8" size="3" />
+      <BitField name="L2 cache line length" start="12" size="2" />
+      <BitField name="L2 associativity" start="18" size="1" />
+      <BitField name="L2 cache way size (Dsize)" start="20" size="3" />
+    </Register>
+    <Register name="reg1_control" start="+0x0100" size="4">
+      <BitField name="L2 Cache enable" start="0" size="1" />
+    </Register>
+    <Register name="reg1_aux_control" start="+0x0104" size="4">
+      <BitField name="Full Line of Zero Enable" start="0" size="1" />
+      <BitField name="High Priority for SO and Dev Reads Enable" start="10" size="1" />
+      <BitField name="Store buffer device limitation Enable" start="11" size="1" />
+      <BitField name="Exclusive cache configuration" start="12" size="1" />
+      <BitField name="Shared Attribute Invalidate Enable" start="13" size="1" />
+      <BitField name="Associativity" start="16" size="1" />
+      <BitField name="Way Size" start="17" size="3">
+        <Enum name="Reserved" description="Internally mapped to 16 KB" start="0" />
+        <Enum name="16 KB" start="1" />
+        <Enum name="32 KB" start="2" />
+        <Enum name="64 KB" start="3" />
+        <Enum name="128 KB" start="4" />
+        <Enum name="256 KB" start="5" />
+        <Enum name="512 KB" start="6" />
+        <Enum name="Reserved" description="Internally mapped to 512 KB" start="7" />
+      </BitField>
+      <BitField name="Event monitor bus enable" start="20" size="1" />
+      <BitField name="Parity enable" start="21" size="1" />
+      <BitField name="Shared attribute override enable" start="22" size="1" />
+      <BitField name="Force write allocate" start="23" size="2" />
+      <BitField name="Cache replacement policy" start="25" size="1" />
+      <BitField name="Non-secure lockdown enable" start="26" size="1" />
+      <BitField name="Non-secure interrupt access control" start="27" size="1" />
+      <BitField name="Data prefetch enable " start="28" size="1" />
+      <BitField name="Instruction prefetch enable" start="29" size="1" />
+      <BitField name="Early BRESP enable" start="30" size="1" />
+    </Register>
+    <Register name="reg1_tag_ram_control" start="+0x0108" size="4">
+      <BitField name="RAM setup latency" start="0" size="3">
+        <Enum name="1 cycle of latency" start="0" />
+        <Enum name="2 cycle of latency" start="1" />
+        <Enum name="3 cycle of latency" start="2" />
+        <Enum name="4 cycle of latency" start="3" />
+        <Enum name="5 cycle of latency" start="4" />
+        <Enum name="6 cycle of latency" start="5" />
+        <Enum name="7 cycle of latency" start="6" />
+        <Enum name="8 cycle of latency" start="7" />
+      </BitField>
+      <BitField name="RAM read access latency" start="4" size="3">
+        <Enum name="1 cycle of latency" start="0" />
+        <Enum name="2 cycle of latency" start="1" />
+        <Enum name="3 cycle of latency" start="2" />
+        <Enum name="4 cycle of latency" start="3" />
+        <Enum name="5 cycle of latency" start="4" />
+        <Enum name="6 cycle of latency" start="5" />
+        <Enum name="7 cycle of latency" start="6" />
+        <Enum name="8 cycle of latency" start="7" />
+      </BitField>
+      <BitField name="RAM write access latency" start="8" size="3">
+        <Enum name="1 cycle of latency" start="0" />
+        <Enum name="2 cycle of latency" start="1" />
+        <Enum name="3 cycle of latency" start="2" />
+        <Enum name="4 cycle of latency" start="3" />
+        <Enum name="5 cycle of latency" start="4" />
+        <Enum name="6 cycle of latency" start="5" />
+        <Enum name="7 cycle of latency" start="6" />
+        <Enum name="8 cycle of latency" start="7" />
+      </BitField>
+    </Register>
+    <Register name="reg1_data_ram_control" start="+0x010C" size="4">
+      <BitField name="RAM setup latency" start="0" size="3">
+        <Enum name="1 cycle of latency" start="0" />
+        <Enum name="2 cycle of latency" start="1" />
+        <Enum name="3 cycle of latency" start="2" />
+        <Enum name="4 cycle of latency" start="3" />
+        <Enum name="5 cycle of latency" start="4" />
+        <Enum name="6 cycle of latency" start="5" />
+        <Enum name="7 cycle of latency" start="6" />
+        <Enum name="8 cycle of latency" start="7" />
+      </BitField>
+      <BitField name="RAM read access latency" start="4" size="3">
+        <Enum name="1 cycle of latency" start="0" />
+        <Enum name="2 cycle of latency" start="1" />
+        <Enum name="3 cycle of latency" start="2" />
+        <Enum name="4 cycle of latency" start="3" />
+        <Enum name="5 cycle of latency" start="4" />
+        <Enum name="6 cycle of latency" start="5" />
+        <Enum name="7 cycle of latency" start="6" />
+        <Enum name="8 cycle of latency" start="7" />
+      </BitField>
+      <BitField name="RAM write access latency" start="8" size="3">
+        <Enum name="1 cycle of latency" start="0" />
+        <Enum name="2 cycle of latency" start="1" />
+        <Enum name="3 cycle of latency" start="2" />
+        <Enum name="4 cycle of latency" start="3" />
+        <Enum name="5 cycle of latency" start="4" />
+        <Enum name="6 cycle of latency" start="5" />
+        <Enum name="7 cycle of latency" start="6" />
+        <Enum name="8 cycle of latency" start="7" />
+      </BitField>
+    </Register>
+  </RegisterGroup>
 </Root>
